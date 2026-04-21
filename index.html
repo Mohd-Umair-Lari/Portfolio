@@ -234,39 +234,53 @@
         }
 
         .social-links {
+            position: relative;
             display: flex;
-            gap: 1.5rem;
+            width: fit-content;
+            gap: 1rem;
             justify-content: center;
+            margin: 0 auto 2.2rem;
+            padding: 0.8rem 1rem;
+            border-radius: 1.25rem;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.82) 0%, rgba(219, 234, 254, 0.78) 100%);
+            border: 1px solid rgba(var(--primary-rgb), 0.28);
+            box-shadow: 0 14px 35px rgba(15, 23, 42, 0.12);
+            backdrop-filter: blur(8px);
             margin-bottom: 2rem;
         }
 
         .social-links a {
-            width: 50px;
-            height: 50px;
+            width: 54px;
+            height: 54px;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, rgba(var(--primary-rgb), 0.16) 0%, rgba(var(--primary-light-rgb), 0.12) 100%);
-            border: 1.5px solid rgba(var(--primary-rgb), 0.35);
-            border-radius: 0.75rem;
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.98) 0%, rgba(219, 234, 254, 0.84) 100%);
+            border: 1px solid rgba(var(--primary-rgb), 0.3);
+            border-radius: 1rem;
             color: var(--primary-light);
             text-decoration: none;
-            transition: all 0.3s ease;
+            transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
             font-size: 1.3rem;
-            box-shadow: 0 4px 15px rgba(var(--primary-rgb), 0.12);
+            box-shadow: 0 8px 20px rgba(15, 23, 42, 0.1);
         }
 
         .social-links a img {
             display: block;
             width: 22px;
             height: 22px;
+            object-fit: contain;
         }
 
         .social-links a:hover {
-            background: linear-gradient(135deg, rgba(var(--primary-rgb), 0.24) 0%, rgba(var(--primary-light-rgb), 0.18) 100%);
-            transform: translateY(-5px);
-            box-shadow: 0 8px 30px rgba(var(--primary-rgb), 0.24);
-            border-color: var(--primary-light);
+            transform: translateY(-6px) scale(1.03);
+            box-shadow: 0 14px 28px rgba(var(--primary-rgb), 0.28);
+            border-color: rgba(var(--primary-light-rgb), 0.55);
+        }
+
+        .social-links a:focus-visible {
+            outline: 3px solid rgba(var(--primary-rgb), 0.32);
+            outline-offset: 2px;
         }
 
         /* Sections */
@@ -556,8 +570,18 @@
         }
 
         .contact-method-label {
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
             color: var(--text-secondary);
             font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .contact-method-label img {
+            width: 18px;
+            height: 18px;
+            object-fit: contain;
         }
 
         .contact-method-value {
@@ -640,10 +664,19 @@
         }
 
         .footer-links a {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
             color: var(--text-secondary);
             text-decoration: none;
             transition: color 0.3s ease;
             font-size: 0.9rem;
+        }
+
+        .footer-links a img {
+            width: 16px;
+            height: 16px;
+            object-fit: contain;
         }
 
         .footer-links a:hover {
@@ -1052,10 +1085,10 @@
                 <div class="footer-section">
                     <h4>Connect</h4>
                     <ul class="footer-links">
-                    <li><a href="https://github.com/Mohd-Umair-Lari" target="_blank" rel="noopener noreferrer">💻 GitHub</a></li>
+                    <li><a href="https://github.com/Mohd-Umair-Lari" target="_blank" rel="noopener noreferrer"><img src="https://github.githubassets.com/favicons/favicon.svg" alt="GitHub" width="16" height="16"> GitHub</a></li>
                         <li><a href="https://www.linkedin.com/in/mohd-umair-lari-872594288/"
-                        target="_blank" rel="noopener noreferrer">💼 LinkedIn</a></li>
-                    <li><a href="mailto:umairlari0786@gmail.com">📧 Email</a></li>
+                        target="_blank" rel="noopener noreferrer"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linkedin/linkedin-original.svg" alt="LinkedIn" width="16" height="16"> LinkedIn</a></li>
+                    <li><a href="mailto:umairlari0786@gmail.com"><img src="https://www.gstatic.com/images/branding/product/1x/gmail_2020q4_32dp.png" alt="Email" width="16" height="16"> Email</a></li>
                     <li><a href="https://x.com/umair_lari_" target="_blank" rel="noopener noreferrer">🐦 X</a></li>
                     </ul>
                 </div>
