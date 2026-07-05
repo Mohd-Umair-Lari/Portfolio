@@ -189,12 +189,6 @@ function App() {
         </section>
 
         <section id="contact" className="py-20">
-          <div className="mb-8 flex flex-col justify-between gap-4 lg:flex-row lg:items-end">
-            <h2 className="font-display text-4xl tracking-[-0.03em] text-white sm:text-5xl">Contact</h2>
-            <p className="max-w-2xl leading-8 text-slate-400">
-              Add your real email and social links here, then we can swap in your image when you send it.
-            </p>
-          </div>
           <div className="grid gap-5 lg:grid-cols-[1.2fr_0.8fr]">
             <div className="rounded-[28px] border border-white/10 bg-white/5 p-7">
               <h3 className="text-lg font-bold text-white">Let’s connect</h3>
@@ -212,12 +206,6 @@ function App() {
                   <span className="text-slate-400">github.com/umair-lari</span>
                 </a>
               </div>
-            </div>
-            <div className="rounded-[28px] border border-white/10 bg-gradient-to-b from-white/7 to-white/3 p-7">
-              <h3 className="text-lg font-bold text-white">Notes</h3>
-              <p className="mt-3 leading-8 text-slate-400">
-                The app is now on the exact stack you requested: React, TypeScript, Tailwind CSS, Framer Motion, and Vite.
-              </p>
             </div>
           </div>
         </section>
