@@ -205,11 +205,11 @@ function App() {
                 </a>
                 <a className="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-white/5 px-5 py-4" href="https://www.linkedin.com/in/mohd-umair-lari-872594288/" target="_blank" rel="noreferrer">
                   <span className="font-semibold text-white">LinkedIn</span>
-                  <span className="text-slate-400">linkedin.com/in/mohd-umair-lari-872594288</span>
+                  <span className="text-slate-400">linkedin.com/in/umair-lari</span>
                 </a>
                 <a className="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-white/5 px-5 py-4" href="https://github.com/Mohd-Umair-Lari" target="_blank" rel="noreferrer">
                   <span className="font-semibold text-white">GitHub</span>
-                  <span className="text-slate-400">github.com/Mohd-Umair-Lari</span>
+                  <span className="text-slate-400">github.com/umair-lari</span>
                 </a>
               </div>
             </div>

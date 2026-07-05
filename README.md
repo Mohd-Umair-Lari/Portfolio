@@ -1,4 +1,4 @@
-# Mohd Umair Lari - Professional Portfolio
+# Umair Lari - Professional Portfolio
 
 A clean, fast, and production-ready portfolio built with vanilla HTML/CSS.
 
@@ -59,7 +59,7 @@ Then open `http://localhost:8000`
 ## License
 
 Free to use and modify for your portfolio.
-# Professional Portfolio - Mohd Umair Lari
+# Professional Portfolio - Umair Lari
 
 A modern, aesthetically pleasing portfolio website built with **React 18**, **TypeScript**, **Tailwind CSS**, and **Framer Motion** animations.
 
@@ -212,4 +212,4 @@ This portfolio template is open source. Feel free to use it for your own portfol
 
 ## 👨‍💻 Author
 
-Mohd Umair Lari - Senior Software Development Engineer
+Umair Lari - Senior Software Development Engineer
