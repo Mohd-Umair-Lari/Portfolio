@@ -144,12 +144,6 @@ function App() {
         </section>
 
         <section id="about" className="py-20">
-          <div className="mb-8 flex flex-col justify-between gap-4 lg:flex-row lg:items-end">
-            <h2 className="font-display text-4xl tracking-[-0.03em] text-white sm:text-5xl">About</h2>
-            <p className="max-w-2xl leading-8 text-slate-400">
-              The goal here is to reproduce the same kind of premium, minimal portfolio presence without copying the target’s source code or exact branding assets.
-            </p>
-          </div>
           <div className="grid gap-5 lg:grid-cols-2">
             <article className="rounded-[24px] border border-white/10 bg-white/5 p-7 shadow-[0_18px_42px_rgba(0,0,0,0.18)]">
               <h3 className="text-lg font-bold text-white">What I do</h3>
@@ -171,12 +165,6 @@ function App() {
         </section>
 
         <section id="work" className="py-20">
-          <div className="mb-8 flex flex-col justify-between gap-4 lg:flex-row lg:items-end">
-            <h2 className="font-display text-4xl tracking-[-0.03em] text-white sm:text-5xl">Selected Work</h2>
-            <p className="max-w-2xl leading-8 text-slate-400">
-              These cards are placeholders for your actual projects and can be swapped without changing the overall layout.
-            </p>
-          </div>
           <div className="grid gap-5 lg:grid-cols-3">
             {projects.map((project, index) => (
               <article key={project.title} className="rounded-[24px] border border-white/10 bg-[#0b1220]/80 p-7 shadow-[0_18px_42px_rgba(0,0,0,0.18)]">
