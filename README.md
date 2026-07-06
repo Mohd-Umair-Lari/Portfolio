@@ -209,6 +209,7 @@ Update these in the components:
 ## 📄 License
 
 This portfolio template is open source. Feel free to use it for your own portfolio!
+burn the Readmme as per ur need for the reference i have only added the readme.markdown file.s
 
 ## 👨‍💻 Author
 
