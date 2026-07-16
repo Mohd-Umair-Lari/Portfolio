@@ -57,8 +57,8 @@ function SphereStage() {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
   const { scrollYProgress } = useScroll();
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 1.35]);
-  const opacity = useTransform(scrollYProgress, [0, 0.4, 1], [1, 0.7, 0.45]);
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 0.65]);
+  const opacity = useTransform(scrollYProgress, [0, 0.25, 0.6], [1, 0.4, 0]);
 
   return (
     <motion.div
