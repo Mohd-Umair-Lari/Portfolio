@@ -675,12 +675,10 @@ function Contact() {
         <Reveal delay={0.35}>
           <div className="mt-16 flex flex-wrap gap-4">
             <a
-              href="https://www.linkedin.com/in/mohd-umair-lari-872594288/"
-              target="_blank"
-              rel="noreferrer"
+              href={`mailto:${EMAIL}`}
               className="inline-flex items-center gap-3 bg-gold text-primary-foreground px-6 py-3 text-sm font-medium tracking-wide hover:opacity-90 transition hover-scale"
             >
-              Connect on LinkedIn →
+              Email →
             </a>
             <a
               href={CV_HREF}
