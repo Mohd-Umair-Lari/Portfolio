@@ -644,7 +644,7 @@ function Contact() {
 
         <div className="mt-16 grid md:grid-cols-3 gap-10">
           <Reveal delay={0.1}>
-            <ContactCard label="Email" value={EMAIL} href={`mailto:${EMAIL}`} />
+            <ContactCard label="LinkedIn" value="Mohd Umair Lari" href="https://www.linkedin.com/in/mohd-umair-lari-872594288/" />
           </Reveal>
           <Reveal delay={0.2}>
             <ContactCard label="GitHub" value="Mohd-Umair-Lari" href={GITHUB_URL} />
@@ -662,10 +662,12 @@ function Contact() {
         <Reveal delay={0.35}>
           <div className="mt-16 flex flex-wrap gap-4">
             <a
-              href={`mailto:${EMAIL}`}
+              href="https://www.linkedin.com/in/mohd-umair-lari-872594288/"
+              target="_blank"
+              rel="noreferrer"
               className="inline-flex items-center gap-3 bg-gold text-primary-foreground px-6 py-3 text-sm font-medium tracking-wide hover:opacity-90 transition hover-scale"
             >
-              Email me →
+              Connect on LinkedIn →
             </a>
             <a
               href={CV_HREF}
