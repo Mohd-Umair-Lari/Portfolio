@@ -29,9 +29,6 @@ export const Route = createFileRoute("/")({
   }),
   component: Portfolio,
 });
-
-/* ---------------- Reveal helper ---------------- */
-
 function Reveal({
   children,
   delay = 0,
@@ -56,9 +53,6 @@ function Reveal({
     </motion.div>
   );
 }
-
-/* ---------------- Sphere stage (fixed background) ---------------- */
-
 function SphereStage() {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
@@ -72,7 +66,6 @@ function SphereStage() {
       className="fixed inset-0 -z-10 pointer-events-none"
       aria-hidden
     >
-      {/* dotted grid backdrop */}
       <div
         className="absolute inset-0 opacity-[0.22]"
         style={{
@@ -85,7 +78,6 @@ function SphereStage() {
             "radial-gradient(ellipse at center, black 35%, transparent 75%)",
         }}
       />
-      {/* gold ambient glow */}
       <div
         className="absolute inset-0 opacity-50"
         style={{
@@ -103,9 +95,6 @@ function SphereStage() {
     </motion.div>
   );
 }
-
-/* ---------------- Page ---------------- */
-
 function Portfolio() {
   return (
     <div className="relative min-h-screen text-foreground overflow-x-hidden">
@@ -146,9 +135,6 @@ function ScrollBackground() {
     />
   );
 }
-
-/* ---------------- Nav ---------------- */
-
 function Nav() {
   const links = [
     ["About", "#about"],
@@ -192,9 +178,6 @@ function Nav() {
     </motion.header>
   );
 }
-
-/* ---------------- Hero ---------------- */
-
 function Hero() {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
@@ -312,8 +295,6 @@ function Hero() {
             </motion.div>
           ))}
         </motion.dl>
-
-        {/* scroll cue */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -332,9 +313,6 @@ function Hero() {
     </section>
   );
 }
-
-/* ---------------- About ---------------- */
-
 function About() {
   return (
     <Section id="about" eyebrow="01 — About" title="A builder who publishes.">
@@ -388,9 +366,6 @@ function Row({ k, v }: { k: string; v: string }) {
     </li>
   );
 }
-
-/* ---------------- Skills ---------------- */
-
 function Skills() {
   const groups: { title: string; items: string[] }[] = [
     { title: "Languages", items: ["Python", "Java", "SQL", "Bash", "HTML / CSS / JS"] },
@@ -429,9 +404,6 @@ function Skills() {
     </Section>
   );
 }
-
-/* ---------------- Experience ---------------- */
-
 function Experience() {
   return (
     <Section id="experience" eyebrow="03 — Experience" title="Where I've worked.">
@@ -446,7 +418,16 @@ function Experience() {
             "Engineered and maintained automated data pipelines in Python/Pandas, leading a team of 4 interns through development & deployment.",
           ]}
           tags={["Python", "Pandas", "CI/CD", "Team lead"]}
-          note="ICC & LOR awarded"
+          note={
+            <a
+              href="https://drive.google.com/drive/folders/1_MQZPCji5dUS_6XLYQ2ngoMO1x1JmmLn"
+              target="_blank"
+              rel="noreferrer"
+              className="hover:text-gold transition-colors underline underline-offset-4"
+            >
+              ICC & LOR awarded
+            </a>
+          }
         />
       </ol>
     </Section>
@@ -456,7 +437,7 @@ function Experience() {
 function ExperienceItem({
   when, role, org, bullets, tags, note,
 }: {
-  when: string; role: string; org: string; bullets: string[]; tags: string[]; note?: string;
+  when: string; role: string; org: string; bullets: string[]; tags: string[]; note?: ReactNode;
 }) {
   return (
     <Reveal>
@@ -495,9 +476,6 @@ function ExperienceItem({
     </Reveal>
   );
 }
-
-/* ---------------- Projects ---------------- */
-
 function Projects() {
   const projects = [
     {
@@ -510,7 +488,7 @@ function Projects() {
         "CORS-aware cross-origin integration between a Vercel frontend and a HuggingFace-hosted backend.",
       ],
       stack: ["FastAPI", "Flask", "MongoDB", "RAG", "Monte Carlo", "Vercel", "HuggingFace"],
-      href: GITHUB_URL,
+      href: "https://github.com/Mohd-Umair-Lari/AI-Driven-Invest-planner",
       cta: "GitHub repo",
     },
     {
@@ -571,9 +549,6 @@ function Projects() {
     </Section>
   );
 }
-
-/* ---------------- Publications ---------------- */
-
 function Publications() {
   const pubs = [
     {
@@ -619,9 +594,6 @@ function Publications() {
     </Section>
   );
 }
-
-/* ---------------- Certifications ---------------- */
-
 function Certifications() {
   const items = [
     { title: "LeetCode — Top 15% Biweekly", desc: "300+ submissions · 50-day & 100-day streak badges" },
@@ -645,9 +617,6 @@ function Certifications() {
     </Section>
   );
 }
-
-/* ---------------- Contact ---------------- */
-
 function Contact() {
   return (
     <section id="contact" className="relative">
@@ -718,9 +687,6 @@ function ContactCard({
     </motion.a>
   );
 }
-
-/* ---------------- Footer ---------------- */
-
 function Footer() {
   return (
     <footer className="relative border-t border-border">
@@ -731,9 +697,6 @@ function Footer() {
     </footer>
   );
 }
-
-/* ---------------- Shared ---------------- */
-
 function Section({
   id, eyebrow, title, children,
 }: { id: string; eyebrow: string; title: string; children: ReactNode }) {
