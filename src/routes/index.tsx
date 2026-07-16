@@ -501,7 +501,7 @@ function Projects() {
         "Leveraged BigQuery ML for data ingestion and analytics pipelines feeding the LLM layer.",
       ],
       stack: ["Cloud Run", "Vertex AI", "BigQuery ML", "Docker", "Generative AI"],
-      href: GITHUB_URL,
+      href: "https://console.cloud.google.com/vertex-ai/studio/build/locations/us-central1/8678836154419642368?project=ai-driven-investment-planner",
       cta: "GCP console",
     },
   ];
