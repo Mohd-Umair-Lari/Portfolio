@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
+import { motion, useScroll, useTransform, useReducedMotion, useMotionValueEvent } from "framer-motion";
 import { lazy, Suspense, useEffect, useRef, useState, type ReactNode } from "react";
 
 const DotSphere = lazy(() => import("@/components/DotSphere"));
@@ -57,12 +57,22 @@ function SphereStage() {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
   const { scrollYProgress } = useScroll();
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 0.65]);
-  const opacity = useTransform(scrollYProgress, [0, 0.25, 0.6], [1, 0.4, 0]);
+  const bgScale = useTransform(scrollYProgress, [0, 1], [1, 1.35]);
+  const bgOpacity = useTransform(scrollYProgress, [0, 0.4, 1], [1, 0.7, 0.45]);
+
+  const sphereScale = useTransform(scrollYProgress, [0, 1], [1, 0.65], { clamp: true });
+  const sphereOpacity = useTransform(scrollYProgress, [0, 0.2, 0.4], [1, 0.2, 0], { clamp: true });
+  
+  const [showSphere, setShowSphere] = useState(true);
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    if (latest > 0.45 && showSphere) setShowSphere(false);
+    else if (latest <= 0.45 && !showSphere) setShowSphere(true);
+  });
+  const sphereDisplay = useTransform(scrollYProgress, (v) => (v > 0.6 ? "none" : "block"));
 
   return (
     <motion.div
-      style={{ scale, opacity }}
+      style={{ scale: bgScale, opacity: bgOpacity }}
       className="fixed inset-0 -z-10 pointer-events-none"
       aria-hidden
     >
@@ -85,11 +95,14 @@ function SphereStage() {
             "radial-gradient(900px 500px at 50% 50%, color-mix(in oklab, var(--gold) 12%, transparent), transparent 65%)",
         }}
       />
-      {mounted && (
+      {mounted && showSphere && (
         <Suspense fallback={null}>
-          <div className="absolute bottom-0 right-0 w-[50vw] h-[50vw] md:w-[36vw] md:h-[36vw] lg:w-[30vw] lg:h-[30vw] pointer-events-none">
+          <motion.div 
+            style={{ scale: sphereScale, opacity: sphereOpacity, display: sphereDisplay }}
+            className="absolute bottom-0 right-0 w-[50vw] h-[50vw] md:w-[36vw] md:h-[36vw] lg:w-[30vw] lg:h-[30vw] pointer-events-none origin-bottom-right"
+          >
             <DotSphere />
-          </div>
+          </motion.div>
         </Suspense>
       )}
     </motion.div>
