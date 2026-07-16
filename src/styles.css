@@ -1,0 +1,132 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* Sage Mist — light green that fades to white on scroll */
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-gold: var(--gold);
+  --color-gold-soft: var(--gold-soft);
+  --color-ink: var(--ink);
+
+  --font-display: "Google Sans", "Open Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Google Sans", "Open Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Google Sans Code", "JetBrains Mono", ui-monospace, monospace;
+}
+
+:root {
+  --radius: 0.5rem;
+
+  /* Background is painted by the scroll layer; tokens stay high-contrast on both green and white. */
+  --bg-top: #dff3df;        /* light green */
+  --bg-bottom: #ffffff;     /* white */
+
+  --background: oklch(0.96 0.04 145);
+  --foreground: oklch(0.16 0.02 160);          /* near-black ink */
+  --ink: oklch(0.99 0.005 145);
+  --card: oklch(1 0 0 / 78%);                  /* translucent white card */
+  --card-foreground: oklch(0.16 0.02 160);
+  --popover: oklch(1 0 0 / 95%);
+  --popover-foreground: oklch(0.16 0.02 160);
+  --primary: oklch(0.42 0.13 152);             /* deep sage */
+  --primary-foreground: oklch(0.99 0.005 145); /* white text on sage buttons */
+  --secondary: oklch(0.92 0.04 145);
+  --secondary-foreground: oklch(0.16 0.02 160);
+  --muted: oklch(0.94 0.02 145);
+  --muted-foreground: oklch(0.30 0.03 160);    /* darker for legibility */
+  --accent: oklch(0.62 0.14 150);
+  --accent-foreground: oklch(0.99 0.005 145);
+  --destructive: oklch(0.6 0.22 25);
+  --destructive-foreground: oklch(0.98 0 0);
+  --border: oklch(0.30 0.05 155 / 28%);
+  --input: oklch(0.30 0.05 155 / 22%);
+  --ring: oklch(0.42 0.13 152);
+
+  --gold: oklch(0.38 0.12 152);                /* alias → deep sage (used for accents) */
+  --gold-soft: oklch(0.58 0.14 150);
+
+  --gradient-gold: linear-gradient(135deg, var(--gold) 0%, var(--gold-soft) 100%);
+  --shadow-gold: 0 20px 60px -20px color-mix(in oklab, var(--gold) 35%, transparent);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    font-feature-settings: "ss01", "cv11";
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background: var(--gold);
+    color: var(--background);
+  }
+}
+
+@utility text-gold {
+  color: var(--gold);
+}
+
+@utility bg-gold {
+  background-color: var(--gold);
+}
+
+@utility text-gradient-gold {
+  background: var(--gradient-gold);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@utility hairline {
+  border-top: 1px solid color-mix(in oklab, var(--gold) 40%, transparent);
+}
+
+@utility container-prose {
+  max-width: 72rem;
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+}
+
+@utility eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
