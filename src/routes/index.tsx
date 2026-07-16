@@ -557,6 +557,7 @@ function Publications() {
       title: "An Edge-Native Machine Learning Framework for Proactive IoT Network Security",
       authors: "Babul P. Tewari, Umair Lari, Poulomi Mukherjee",
       tag: "Conference",
+      href: "https://ieeexplore.ieee.org/abstract/document/11508580",
     },
     {
       venue: "Springer — Securing the Internet of Things: ML and Beyond",
@@ -584,9 +585,20 @@ function Publications() {
                 <p className="mt-2 text-sm text-muted-foreground italic">{p.authors}</p>
                 <p className="mt-1 text-xs text-muted-foreground">{p.venue}</p>
               </div>
-              <span className="self-start text-[10px] uppercase tracking-widest px-2.5 py-1 border border-gold/50 text-gold">
-                {p.tag}
-              </span>
+              {p.href ? (
+                <a
+                  href={p.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="self-start text-[10px] uppercase tracking-widest px-2.5 py-1 border border-gold/50 text-gold hover:bg-gold hover:text-primary-foreground transition-colors story-link"
+                >
+                  {p.tag}
+                </a>
+              ) : (
+                <span className="self-start text-[10px] uppercase tracking-widest px-2.5 py-1 border border-gold/50 text-gold">
+                  {p.tag}
+                </span>
+              )}
             </li>
           </Reveal>
         ))}
@@ -596,10 +608,10 @@ function Publications() {
 }
 function Certifications() {
   const items = [
-    { title: "LeetCode — Top 15% Biweekly", desc: "300+ submissions · 50-day & 100-day streak badges" },
-    { title: "Google Cloud Arcade — Skill Badges", desc: "Hands-on labs in cloud infrastructure & data engineering" },
-    { title: "Cybersecurity Foundation — Coursera", desc: "Micro-degree, Apr 2024" },
-    { title: "Python WebDev & Cloud — Microsoft", desc: "Feb 2024" },
+    { title: "LeetCode — Top 15% Biweekly", desc: "300+ submissions · 50-day & 100-day streak badges", href: "https://leetcode.com/u/Umair-Lari/" },
+    { title: "Google Cloud Arcade — Skill Badges", desc: "Hands-on labs in cloud infrastructure & data engineering", href: "https://www.skills.google/public_profiles/8d66a145-3000-404c-96a5-4863dd281884" },
+    { title: "Cybersecurity Foundation — Coursera", desc: "Micro-degree, Apr 2024", href: "https://www.coursera.org/account/accomplishments/professional-cert/HQKJ5229NCUV?utm_source=link&utm_medium=certificate&utm_content=cert_image&utm_campaign=sharing_cta&utm_product=prof" },
+    { title: "Python WebDev & Cloud — Microsoft", desc: "Feb 2024", href: "file:///C:/Users/umair/OneDrive/documents/Umair/Resumes/Umair_Lari_AI_ML_Engineer_Resume.pdf" },
   ];
 
   return (
@@ -607,10 +619,10 @@ function Certifications() {
       <div className="grid sm:grid-cols-2 gap-px bg-border">
         {items.map((it, i) => (
           <Reveal key={it.title} delay={i * 0.08}>
-            <div className="bg-background/80 backdrop-blur-sm p-8 h-full hover:bg-card transition-colors">
+            <a href={it.href} target="_blank" rel="noreferrer" className="block bg-background/80 backdrop-blur-sm p-8 h-full hover:bg-card transition-colors">
               <p className="font-display text-2xl text-foreground">{it.title}</p>
               <p className="mt-3 text-sm text-muted-foreground">{it.desc}</p>
-            </div>
+            </a>
           </Reveal>
         ))}
       </div>
