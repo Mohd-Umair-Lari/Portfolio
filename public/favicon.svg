@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2d5a3f" />
+      <stop offset="100%" stop-color="#1b3827" />
+    </linearGradient>
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#d4af37" />
+      <stop offset="100%" stop-color="#f3e5ab" />
+    </linearGradient>
+  </defs>
+  <rect width="100" height="100" rx="24" fill="url(#grad)" />
+  <rect x="2" y="2" width="96" height="96" rx="22" fill="none" stroke="rgba(212, 175, 55, 0.4)" stroke-width="2" />
+  <text x="50%" y="54%" font-family="system-ui, -apple-system, sans-serif" font-size="40" font-weight="700" fill="url(#gold)" text-anchor="middle" dominant-baseline="middle" letter-spacing="1">UL</text>
+</svg>

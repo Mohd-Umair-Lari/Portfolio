@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f1f16" />
+      <stop offset="50%" stop-color="#162e21" />
+      <stop offset="100%" stop-color="#0b1710" />
+    </linearGradient>
+    <linearGradient id="goldText" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f5e6b3" />
+      <stop offset="100%" stop-color="#d4af37" />
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bgGrad)" />
+
+  <!-- Subtle grid pattern -->
+  <g opacity="0.12" stroke="#ffffff" stroke-width="1">
+    <line x1="0" y1="105" x2="1200" y2="105" />
+    <line x1="0" y1="210" x2="1200" y2="210" />
+    <line x1="0" y1="315" x2="1200" y2="315" />
+    <line x1="0" y1="420" x2="1200" y2="420" />
+    <line x1="0" y1="525" x2="1200" y2="525" />
+    <line x1="200" y1="0" x2="200" y2="630" />
+    <line x1="400" y1="0" x2="400" y2="630" />
+    <line x1="600" y1="0" x2="600" y2="630" />
+    <line x1="800" y1="0" x2="800" y2="630" />
+    <line x1="1000" y1="0" x2="1000" y2="630" />
+  </g>
+
+  <!-- Accent glow -->
+  <circle cx="950" cy="300" r="280" fill="#d4af37" opacity="0.08" filter="blur(60px)" />
+
+  <!-- Monogram badge -->
+  <g transform="translate(100, 110)">
+    <circle cx="45" cy="45" r="45" fill="#1b3827" stroke="#d4af37" stroke-width="2" stroke-opacity="0.5" />
+    <text x="45" y="52" font-family="system-ui, sans-serif" font-size="34" font-weight="700" fill="#d4af37" text-anchor="middle" dominant-baseline="middle">UL</text>
+  </g>
+
+  <!-- Main Info -->
+  <text x="100" y="270" font-family="system-ui, -apple-system, sans-serif" font-size="64" font-weight="800" fill="#ffffff" letter-spacing="-1">Mohd Umair Lari</text>
+  <text x="100" y="335" font-family="system-ui, -apple-system, sans-serif" font-size="32" font-weight="600" fill="url(#goldText)">AI/ML Engineer &amp; Researcher</text>
+  <text x="100" y="415" font-family="system-ui, -apple-system, sans-serif" font-size="22" font-weight="400" fill="#a3b899" width="800">
+    Applied ML · Google Cloud · RAG Pipelines · IEEE &amp; Springer Publications
+  </text>
+
+  <!-- Footer Tags -->
+  <g transform="translate(100, 480)">
+    <rect x="0" y="0" width="130" height="38" rx="6" fill="#1b3827" stroke="#d4af37" stroke-opacity="0.4" />
+    <text x="65" y="24" font-family="monospace" font-size="14" font-weight="600" fill="#f5e6b3" text-anchor="middle">FASTAPI</text>
+
+    <rect x="145" y="0" width="130" height="38" rx="6" fill="#1b3827" stroke="#d4af37" stroke-opacity="0.4" />
+    <text x="210" y="24" font-family="monospace" font-size="14" font-weight="600" fill="#f5e6b3" text-anchor="middle">GCP CLOUD</text>
+
+    <rect x="290" y="0" width="140" height="38" rx="6" fill="#1b3827" stroke="#d4af37" stroke-opacity="0.4" />
+    <text x="360" y="24" font-family="monospace" font-size="14" font-weight="600" fill="#f5e6b3" text-anchor="middle">VERTEX AI</text>
+
+    <rect x="445" y="0" width="150" height="38" rx="6" fill="#1b3827" stroke="#d4af37" stroke-opacity="0.4" />
+    <text x="520" y="24" font-family="monospace" font-size="14" font-weight="600" fill="#f5e6b3" text-anchor="middle">IEEE MPCON</text>
+  </g>
+</svg>

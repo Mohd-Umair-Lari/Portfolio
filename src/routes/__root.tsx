@@ -77,6 +77,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { name: "theme-color", content: "#2d5a3f" },
       { title: "Mohd Umair Lari — AI/ML Engineer" },
       {
         name: "description",
@@ -87,13 +88,20 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:title", content: "Mohd Umair Lari — AI/ML Engineer" },
       {
         property: "og:description",
-        content:
-          "AI/ML engineer & researcher. FinPass, GCP serverless AI, IEEE publications.",
+        content: "AI/ML engineer & researcher. FinPass, GCP serverless AI, IEEE publications.",
       },
       { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
+      { property: "og:image", content: "/og-image.svg" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Mohd Umair Lari — AI/ML Engineer" },
+      {
+        name: "twitter:description",
+        content: "AI/ML engineer & researcher. FinPass, GCP serverless AI, IEEE publications.",
+      },
+      { name: "twitter:image", content: "/og-image.svg" },
     ],
     links: [
+      { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
       { rel: "stylesheet", href: appCss },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
@@ -129,7 +137,7 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-
+      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
     </QueryClientProvider>
   );

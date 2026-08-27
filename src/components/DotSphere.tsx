@@ -47,7 +47,7 @@ function DottedGlobe() {
 
   return (
     <group ref={group}>
-
+      {/* Inner dense dotted sphere */}
       <points ref={inner}>
         <bufferGeometry>
           <bufferAttribute
@@ -68,6 +68,7 @@ function DottedGlobe() {
         />
       </points>
 
+      {/* Outer sparse halo */}
       <points ref={outer}>
         <bufferGeometry>
           <bufferAttribute
@@ -88,6 +89,7 @@ function DottedGlobe() {
         />
       </points>
 
+      {/* Subtle inner solid for depth */}
       <mesh>
         <sphereGeometry args={[0.95, 64, 64]} />
         <meshBasicMaterial color={"#0a0a0a"} transparent opacity={0.55} />

@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { motion, useScroll, useTransform, useReducedMotion, useMotionValueEvent } from "framer-motion";
-import { lazy, Suspense, useEffect, useRef, useState, type ReactNode } from "react";
+import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
+import { lazy, Suspense, useEffect, useState, type ReactNode } from "react";
+import { HeroBlock } from "@/components/ui/hero-block-shadcnui";
 
 const DotSphere = lazy(() => import("@/components/DotSphere"));
 
@@ -29,6 +30,9 @@ export const Route = createFileRoute("/")({
   }),
   component: Portfolio,
 });
+
+/* ---------------- Reveal helper ---------------- */
+
 function Reveal({
   children,
   delay = 0,
@@ -53,41 +57,33 @@ function Reveal({
     </motion.div>
   );
 }
+
+/* ---------------- Sphere stage (fixed background) ---------------- */
+
 function SphereStage() {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
   const { scrollYProgress } = useScroll();
-  const bgScale = useTransform(scrollYProgress, [0, 1], [1, 1.35]);
-  const bgOpacity = useTransform(scrollYProgress, [0, 0.4, 1], [1, 0.7, 0.45]);
-
-  const sphereScale = useTransform(scrollYProgress, [0, 1], [1, 0.65], { clamp: true });
-  const sphereOpacity = useTransform(scrollYProgress, [0, 0.2, 0.4], [1, 0.2, 0], { clamp: true });
-  
-  const [showSphere, setShowSphere] = useState(true);
-  useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    if (latest > 0.45 && showSphere) setShowSphere(false);
-    else if (latest <= 0.45 && !showSphere) setShowSphere(true);
-  });
-  const sphereDisplay = useTransform(scrollYProgress, (v) => (v > 0.6 ? "none" : "block"));
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 1.35]);
+  const opacity = useTransform(scrollYProgress, [0, 0.4, 1], [1, 0.7, 0.45]);
 
   return (
     <motion.div
-      style={{ scale: bgScale, opacity: bgOpacity }}
+      style={{ scale, opacity }}
       className="fixed inset-0 -z-10 pointer-events-none"
       aria-hidden
     >
+      {/* dotted grid backdrop */}
       <div
         className="absolute inset-0 opacity-[0.22]"
         style={{
-          backgroundImage:
-            "radial-gradient(rgba(40,80,50,0.55) 1px, transparent 1px)",
+          backgroundImage: "radial-gradient(rgba(40,80,50,0.55) 1px, transparent 1px)",
           backgroundSize: "22px 22px",
-          maskImage:
-            "radial-gradient(ellipse at center, black 35%, transparent 75%)",
-          WebkitMaskImage:
-            "radial-gradient(ellipse at center, black 35%, transparent 75%)",
+          maskImage: "radial-gradient(ellipse at center, black 35%, transparent 75%)",
+          WebkitMaskImage: "radial-gradient(ellipse at center, black 35%, transparent 75%)",
         }}
       />
+      {/* gold ambient glow */}
       <div
         className="absolute inset-0 opacity-50"
         style={{
@@ -95,19 +91,19 @@ function SphereStage() {
             "radial-gradient(900px 500px at 50% 50%, color-mix(in oklab, var(--gold) 12%, transparent), transparent 65%)",
         }}
       />
-      {mounted && showSphere && (
+      {mounted && (
         <Suspense fallback={null}>
-          <motion.div 
-            style={{ scale: sphereScale, opacity: sphereOpacity, display: sphereDisplay }}
-            className="absolute bottom-0 right-0 w-[50vw] h-[50vw] md:w-[36vw] md:h-[36vw] lg:w-[30vw] lg:h-[30vw] pointer-events-none origin-bottom-right"
-          >
+          <div className="absolute bottom-0 right-0 w-[50vw] h-[50vw] md:w-[36vw] md:h-[36vw] lg:w-[30vw] lg:h-[30vw] pointer-events-none">
             <DotSphere />
-          </motion.div>
+          </div>
         </Suspense>
       )}
     </motion.div>
   );
 }
+
+/* ---------------- Page ---------------- */
+
 function Portfolio() {
   return (
     <div className="relative min-h-screen text-foreground overflow-x-hidden">
@@ -115,7 +111,7 @@ function Portfolio() {
       <SphereStage />
       <Nav />
       <main className="relative">
-        <Hero />
+        <HeroBlock />
         <About />
         <Skills />
         <Experience />
@@ -148,6 +144,9 @@ function ScrollBackground() {
     />
   );
 }
+
+/* ---------------- Nav ---------------- */
+
 function Nav() {
   const links = [
     ["About", "#about"],
@@ -171,11 +170,7 @@ function Nav() {
         </a>
         <nav className="hidden md:flex items-center gap-8 text-sm text-muted-foreground">
           {links.map(([label, href]) => (
-            <a
-              key={href}
-              href={href}
-              className="story-link hover:text-gold transition-colors"
-            >
+            <a key={href} href={href} className="story-link hover:text-gold transition-colors">
               {label}
             </a>
           ))}
@@ -191,141 +186,9 @@ function Nav() {
     </motion.header>
   );
 }
-function Hero() {
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start start", "end start"],
-  });
-  const y = useTransform(scrollYProgress, [0, 1], [0, 120]);
-  const fade = useTransform(scrollYProgress, [0, 1], [1, 0]);
 
-  const name = "Mohd Umair";
-  return (
-    <section id="top" ref={ref} className="relative">
-      <motion.div
-        style={{ y, opacity: fade }}
-        className="container-prose relative pt-28 pb-32 md:pt-40 md:pb-48 min-h-[92vh] flex flex-col justify-center"
-      >
-        <motion.p
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2, duration: 0.6 }}
-          className="eyebrow mb-8"
-        >
-          Portfolio · MMXXVI
-        </motion.p>
+/* ---------------- About ---------------- */
 
-        <h1 className="font-display text-5xl md:text-8xl leading-[0.95] tracking-tight">
-          <span className="inline-block overflow-hidden">
-            {name.split(" ").map((word, wi) => (
-              <span key={wi} className="inline-block mr-4 last:mr-0">
-                {word.split("").map((ch, i) => (
-                  <motion.span
-                    key={`${wi}-${i}`}
-                    initial={{ y: "110%", opacity: 0 }}
-                    animate={{ y: "0%", opacity: 1 }}
-                    transition={{
-                      delay: 0.35 + (wi * 4 + i) * 0.04,
-                      duration: 0.8,
-                      ease: [0.22, 1, 0.36, 1],
-                    }}
-                    className="inline-block"
-                  >
-                    {ch}
-                  </motion.span>
-                ))}
-              </span>
-            ))}
-          </span>
-          <br />
-          <motion.span
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.9, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-            className="italic text-gradient-gold inline-block"
-          >
-            Lari.
-          </motion.span>
-        </h1>
-
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.15, duration: 0.7 }}
-          className="mt-10 max-w-2xl text-lg md:text-xl text-muted-foreground leading-relaxed"
-        >
-          AI/ML engineer & researcher engineering{" "}
-          <span className="text-foreground">intelligent, cloud-native systems</span>{" "}
-          — from RAG pipelines and Monte Carlo finance to edge-native IoT security,
-          published with IEEE and Springer.
-        </motion.p>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.35, duration: 0.7 }}
-          className="mt-12 flex flex-wrap gap-4"
-        >
-          <a
-            href="#projects"
-            className="group inline-flex items-center gap-3 bg-gold text-primary-foreground px-6 py-3 text-sm font-medium tracking-wide hover:opacity-90 transition hover-scale"
-          >
-            View selected work
-            <span className="transition-transform group-hover:translate-x-1">→</span>
-          </a>
-          <a
-            href="#contact"
-            className="inline-flex items-center gap-3 px-6 py-3 text-sm font-medium tracking-wide border border-border hover:border-gold hover:text-gold transition-colors"
-          >
-            Get in touch
-          </a>
-        </motion.div>
-
-        <motion.dl
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.5, duration: 0.7 }}
-          className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-6"
-        >
-          {[
-            ["8.32", "CGPA · B.Tech AI/ML"],
-            ["2", "Research publications"],
-            ["300+", "LeetCode submissions"],
-            ["3", "Spoken languages"],
-          ].map(([k, v], i) => (
-            <motion.div
-              key={v}
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1.55 + i * 0.08, duration: 0.6 }}
-              className="border-l border-gold/40 pl-4"
-            >
-              <dt className="font-display text-3xl md:text-4xl text-gold">{k}</dt>
-              <dd className="mt-1 text-xs uppercase tracking-widest text-muted-foreground">
-                {v}
-              </dd>
-            </motion.div>
-          ))}
-        </motion.dl>
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 2, duration: 0.6 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2"
-        >
-          <motion.div
-            animate={{ y: [0, 8, 0] }}
-            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-            className="font-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground"
-          >
-            scroll ↓
-          </motion.div>
-        </motion.div>
-      </motion.div>
-    </section>
-  );
-}
 function About() {
   return (
     <Section id="about" eyebrow="01 — About" title="A builder who publishes.">
@@ -336,21 +199,18 @@ function About() {
             <span className="text-foreground">
               Maulana Abdul Kalam Azad University of Technology
             </span>
-            , Kolkata, studying Computer Science with a specialization in
-            Artificial Intelligence & Machine Learning.
+            , Kolkata, studying Computer Science with a specialization in Artificial Intelligence &
+            Machine Learning.
           </p>
           <p>
-            My work sits at the intersection of{" "}
-            <span className="text-foreground">applied ML</span>,{" "}
-            <span className="text-foreground">cloud-native engineering</span>{" "}
-            and <span className="text-foreground">research</span> — shipping
-            full-stack AI products on GCP and contributing to peer-reviewed
-            papers on IoT security and malware detection.
+            My work sits at the intersection of <span className="text-foreground">applied ML</span>,{" "}
+            <span className="text-foreground">cloud-native engineering</span> and{" "}
+            <span className="text-foreground">research</span> — shipping full-stack AI products on
+            GCP and contributing to peer-reviewed papers on IoT security and malware detection.
           </p>
           <p>
-            Outside the terminal: I speak German (CEFR A2, sitting for B1),
-            French (A1), and English fluently — and I'm always one coffee away
-            from the next LeetCode contest.
+            Outside the terminal: I speak German (CEFR A2, sitting for B1), French (A1), and English
+            fluently — and I'm always one coffee away from the next LeetCode contest.
           </p>
         </Reveal>
 
@@ -379,12 +239,38 @@ function Row({ k, v }: { k: string; v: string }) {
     </li>
   );
 }
+
+/* ---------------- Skills ---------------- */
+
 function Skills() {
   const groups: { title: string; items: string[] }[] = [
     { title: "Languages", items: ["Python", "Java", "SQL", "Bash", "HTML / CSS / JS"] },
-    { title: "AI / ML", items: ["scikit-learn", "TensorFlow", "LangChain", "RAG Pipelines", "Agentic AI", "OpenCV"] },
-    { title: "Google Cloud", items: ["Vertex AI", "BigQuery / BigQuery ML", "Cloud Run", "Cloud Functions", "VM Mapping", "CI/CD"] },
-    { title: "Engineering", items: ["FastAPI · Flask", "MERN Full-Stack", "REST APIs · CORS", "MongoDB · MySQL", "Docker", "Git & GitHub"] },
+    {
+      title: "AI / ML",
+      items: ["scikit-learn", "TensorFlow", "LangChain", "RAG Pipelines", "Agentic AI", "OpenCV"],
+    },
+    {
+      title: "Google Cloud",
+      items: [
+        "Vertex AI",
+        "BigQuery / BigQuery ML",
+        "Cloud Run",
+        "Cloud Functions",
+        "VM Mapping",
+        "CI/CD",
+      ],
+    },
+    {
+      title: "Engineering",
+      items: [
+        "FastAPI · Flask",
+        "MERN Full-Stack",
+        "REST APIs · CORS",
+        "MongoDB · MySQL",
+        "Docker",
+        "Git & GitHub",
+      ],
+    },
     { title: "Concepts", items: ["SDLC", "OOP", "DSA", "DBMS", "Unit Testing", "Version Control"] },
     { title: "Tools", items: ["Jupyter", "MATLAB", "Apache", "Bootstrap"] },
   ];
@@ -417,6 +303,9 @@ function Skills() {
     </Section>
   );
 }
+
+/* ---------------- Experience ---------------- */
+
 function Experience() {
   return (
     <Section id="experience" eyebrow="03 — Experience" title="Where I've worked.">
@@ -431,16 +320,7 @@ function Experience() {
             "Engineered and maintained automated data pipelines in Python/Pandas, leading a team of 4 interns through development & deployment.",
           ]}
           tags={["Python", "Pandas", "CI/CD", "Team lead"]}
-          note={
-            <a
-              href="https://drive.google.com/drive/folders/1_MQZPCji5dUS_6XLYQ2ngoMO1x1JmmLn"
-              target="_blank"
-              rel="noreferrer"
-              className="hover:text-gold transition-colors underline underline-offset-4"
-            >
-              ICC & LOR awarded
-            </a>
-          }
+          note="ICC & LOR awarded"
         />
       </ol>
     </Section>
@@ -448,9 +328,19 @@ function Experience() {
 }
 
 function ExperienceItem({
-  when, role, org, bullets, tags, note,
+  when,
+  role,
+  org,
+  bullets,
+  tags,
+  note,
 }: {
-  when: string; role: string; org: string; bullets: string[]; tags: string[]; note?: ReactNode;
+  when: string;
+  role: string;
+  org: string;
+  bullets: string[];
+  tags: string[];
+  note?: string;
 }) {
   return (
     <Reveal>
@@ -479,7 +369,10 @@ function ExperienceItem({
           </ul>
           <div className="mt-5 flex flex-wrap gap-2">
             {tags.map((t) => (
-              <span key={t} className="text-[10px] uppercase tracking-widest px-2.5 py-1 border border-gold/40 text-gold">
+              <span
+                key={t}
+                className="text-[10px] uppercase tracking-widest px-2.5 py-1 border border-gold/40 text-gold"
+              >
                 {t}
               </span>
             ))}
@@ -489,6 +382,9 @@ function ExperienceItem({
     </Reveal>
   );
 }
+
+/* ---------------- Projects ---------------- */
+
 function Projects() {
   const projects = [
     {
@@ -501,7 +397,7 @@ function Projects() {
         "CORS-aware cross-origin integration between a Vercel frontend and a HuggingFace-hosted backend.",
       ],
       stack: ["FastAPI", "Flask", "MongoDB", "RAG", "Monte Carlo", "Vercel", "HuggingFace"],
-      href: "https://github.com/Mohd-Umair-Lari/AI-Driven-Invest-planner",
+      href: GITHUB_URL,
       cta: "GitHub repo",
     },
     {
@@ -514,7 +410,7 @@ function Projects() {
         "Leveraged BigQuery ML for data ingestion and analytics pipelines feeding the LLM layer.",
       ],
       stack: ["Cloud Run", "Vertex AI", "BigQuery ML", "Docker", "Generative AI"],
-      href: "https://console.cloud.google.com/vertex-ai/studio/build/locations/us-central1/8678836154419642368?project=ai-driven-investment-planner",
+      href: GITHUB_URL,
       cta: "GCP console",
     },
   ];
@@ -534,13 +430,20 @@ function Projects() {
                 <h3 className="font-display text-4xl md:text-5xl mt-3 leading-none">{p.title}</h3>
               </div>
               <div className="md:col-span-9">
-                <p className="text-xl md:text-2xl font-display italic text-gold-soft">{p.tagline}</p>
+                <p className="text-xl md:text-2xl font-display italic text-gold-soft">
+                  {p.tagline}
+                </p>
                 <div className="mt-6 space-y-4 text-muted-foreground leading-relaxed">
-                  {p.body.map((para) => <p key={para}>{para}</p>)}
+                  {p.body.map((para) => (
+                    <p key={para}>{para}</p>
+                  ))}
                 </div>
                 <div className="mt-6 flex flex-wrap gap-2">
                   {p.stack.map((s) => (
-                    <span key={s} className="text-[10px] uppercase tracking-widest px-2.5 py-1 border border-border text-muted-foreground">
+                    <span
+                      key={s}
+                      className="text-[10px] uppercase tracking-widest px-2.5 py-1 border border-border text-muted-foreground"
+                    >
                       {s}
                     </span>
                   ))}
@@ -562,6 +465,9 @@ function Projects() {
     </Section>
   );
 }
+
+/* ---------------- Publications ---------------- */
+
 function Publications() {
   const pubs = [
     {
@@ -570,7 +476,6 @@ function Publications() {
       title: "An Edge-Native Machine Learning Framework for Proactive IoT Network Security",
       authors: "Babul P. Tewari, Umair Lari, Poulomi Mukherjee",
       tag: "Conference",
-      href: "https://ieeexplore.ieee.org/abstract/document/11508580",
     },
     {
       venue: "Springer — Securing the Internet of Things: ML and Beyond",
@@ -598,20 +503,9 @@ function Publications() {
                 <p className="mt-2 text-sm text-muted-foreground italic">{p.authors}</p>
                 <p className="mt-1 text-xs text-muted-foreground">{p.venue}</p>
               </div>
-              {p.href ? (
-                <a
-                  href={p.href}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="self-start text-[10px] uppercase tracking-widest px-2.5 py-1 border border-gold/50 text-gold hover:bg-gold hover:text-primary-foreground transition-colors story-link"
-                >
-                  {p.tag}
-                </a>
-              ) : (
-                <span className="self-start text-[10px] uppercase tracking-widest px-2.5 py-1 border border-gold/50 text-gold">
-                  {p.tag}
-                </span>
-              )}
+              <span className="self-start text-[10px] uppercase tracking-widest px-2.5 py-1 border border-gold/50 text-gold">
+                {p.tag}
+              </span>
             </li>
           </Reveal>
         ))}
@@ -619,12 +513,21 @@ function Publications() {
     </Section>
   );
 }
+
+/* ---------------- Certifications ---------------- */
+
 function Certifications() {
   const items = [
-    { title: "LeetCode — Top 15% Biweekly", desc: "300+ submissions · 50-day & 100-day streak badges", href: "https://leetcode.com/u/Umair-Lari/" },
-    { title: "Google Cloud Arcade — Skill Badges", desc: "Hands-on labs in cloud infrastructure & data engineering", href: "https://www.skills.google/public_profiles/8d66a145-3000-404c-96a5-4863dd281884" },
-    { title: "Cybersecurity Foundation — Coursera", desc: "Micro-degree, Apr 2024", href: "https://www.coursera.org/account/accomplishments/professional-cert/HQKJ5229NCUV?utm_source=link&utm_medium=certificate&utm_content=cert_image&utm_campaign=sharing_cta&utm_product=prof" },
-    { title: "Python WebDev & Cloud — Microsoft", desc: "Feb 2024", href: "file:///C:/Users/umair/OneDrive/documents/Umair/Resumes/Umair_Lari_AI_ML_Engineer_Resume.pdf" },
+    {
+      title: "LeetCode — Top 15% Biweekly",
+      desc: "300+ submissions · 50-day & 100-day streak badges",
+    },
+    {
+      title: "Google Cloud Arcade — Skill Badges",
+      desc: "Hands-on labs in cloud infrastructure & data engineering",
+    },
+    { title: "Cybersecurity Foundation — Coursera", desc: "Micro-degree, Apr 2024" },
+    { title: "Python WebDev & Cloud — Microsoft", desc: "Feb 2024" },
   ];
 
   return (
@@ -632,16 +535,19 @@ function Certifications() {
       <div className="grid sm:grid-cols-2 gap-px bg-border">
         {items.map((it, i) => (
           <Reveal key={it.title} delay={i * 0.08}>
-            <a href={it.href} target="_blank" rel="noreferrer" className="block bg-background/80 backdrop-blur-sm p-8 h-full hover:bg-card transition-colors">
+            <div className="bg-background/80 backdrop-blur-sm p-8 h-full hover:bg-card transition-colors">
               <p className="font-display text-2xl text-foreground">{it.title}</p>
               <p className="mt-3 text-sm text-muted-foreground">{it.desc}</p>
-            </a>
+            </div>
           </Reveal>
         ))}
       </div>
     </Section>
   );
 }
+
+/* ---------------- Contact ---------------- */
+
 function Contact() {
   return (
     <section id="contact" className="relative">
@@ -657,7 +563,7 @@ function Contact() {
 
         <div className="mt-16 grid md:grid-cols-3 gap-10">
           <Reveal delay={0.1}>
-            <ContactCard label="LinkedIn" value="Mohd Umair Lari" href="https://www.linkedin.com/in/mohd-umair-lari-872594288/" />
+            <ContactCard label="Email" value={EMAIL} href={`mailto:${EMAIL}`} />
           </Reveal>
           <Reveal delay={0.2}>
             <ContactCard label="GitHub" value="Mohd-Umair-Lari" href={GITHUB_URL} />
@@ -678,7 +584,7 @@ function Contact() {
               href={`mailto:${EMAIL}`}
               className="inline-flex items-center gap-3 bg-gold text-primary-foreground px-6 py-3 text-sm font-medium tracking-wide hover:opacity-90 transition hover-scale"
             >
-              Email →
+              Email me →
             </a>
             <a
               href={CV_HREF}
@@ -695,8 +601,16 @@ function Contact() {
 }
 
 function ContactCard({
-  label, value, secondary, href,
-}: { label: string; value: string; secondary?: string; href: string }) {
+  label,
+  value,
+  secondary,
+  href,
+}: {
+  label: string;
+  value: string;
+  secondary?: string;
+  href: string;
+}) {
   return (
     <motion.a
       whileHover={{ y: -4 }}
@@ -706,12 +620,19 @@ function ContactCard({
       rel="noreferrer"
       className="group block border-t border-gold/40 pt-6 hover:border-gold transition-colors"
     >
-      <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground">{label}</p>
-      <p className="mt-3 font-display text-2xl group-hover:text-gold transition-colors break-all">{value}</p>
+      <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
+        {label}
+      </p>
+      <p className="mt-3 font-display text-2xl group-hover:text-gold transition-colors break-all">
+        {value}
+      </p>
       {secondary && <p className="mt-1 text-sm text-muted-foreground">{secondary}</p>}
     </motion.a>
   );
 }
+
+/* ---------------- Footer ---------------- */
+
 function Footer() {
   return (
     <footer className="relative border-t border-border">
@@ -722,9 +643,20 @@ function Footer() {
     </footer>
   );
 }
+
+/* ---------------- Shared ---------------- */
+
 function Section({
-  id, eyebrow, title, children,
-}: { id: string; eyebrow: string; title: string; children: ReactNode }) {
+  id,
+  eyebrow,
+  title,
+  children,
+}: {
+  id: string;
+  eyebrow: string;
+  title: string;
+  children: ReactNode;
+}) {
   return (
     <section id={id} className="relative border-t border-border/60">
       <div className="container-prose py-24 md:py-32">
