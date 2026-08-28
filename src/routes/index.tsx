@@ -570,10 +570,10 @@ function Contact() {
             <ContactCard label="Email" value={EMAIL} href={`mailto:${EMAIL}`} />
           </Reveal>
           <Reveal delay={0.2}>
-            <ContactCard label="GitHub" value="Mohd-Umair-Lari" href={GITHUB_URL} />
+            <ContactCard label="GitHub" value="Clone it" href={GITHUB_URL} />
           </Reveal>
           <Reveal delay={0.3}>
-            <ContactCard label="LinkedIn" value="Mohd-Umair-Lari" href={LinkedIn_URL} />
+            <ContactCard label="LinkedIn" value="Connect with me" href={LinkedIn_URL} />
           </Reveal>
           <Reveal delay={0.4}>
             <ContactCard
