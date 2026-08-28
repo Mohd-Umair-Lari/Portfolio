@@ -1,3 +1,4 @@
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { ArrowDown, Github, Mail } from "lucide-react";
@@ -23,9 +24,16 @@ export function HeroBlock() {
             transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
             className="mb-6 inline-block"
           >
-            <div className="mx-auto h-24 w-24 rounded-full border-4 border-background bg-linear-to-br from-primary to-muted shadow-lg grid place-items-center">
-              <span className="font-display text-2xl font-bold text-primary-foreground">UL</span>
-            </div>
+            <Avatar className="mx-auto h-28 w-28 md:h-32 md:w-32 border-4 border-gold/40 shadow-xl ring-4 ring-gold/20">
+              <AvatarImage
+                src="/profile.jpg"
+                alt="Mohd Umair Lari"
+                className="object-cover object-center"
+              />
+              <AvatarFallback className="bg-linear-to-br from-primary to-muted font-display text-2xl font-bold text-primary-foreground">
+                UL
+              </AvatarFallback>
+            </Avatar>
           </motion.div>
 
           <motion.h1
