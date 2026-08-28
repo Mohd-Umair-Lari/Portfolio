@@ -4,8 +4,10 @@ import { lazy, Suspense, useEffect, useState, type ReactNode } from "react";
 import { HeroBlock } from "@/components/ui/hero-block-shadcnui";
 
 const DotSphere = lazy(() => import("@/components/DotSphere"));
-
 const GITHUB_URL = "https://github.com/Mohd-Umair-Lari";
+const LinkedIn_URL = "https://www.linkedin.com/in/mohd-umair-lari-872594288/";
+const Finpass_url = "https://github.com/Mohd-Umair-Lari/AI-Driven-Invest-planner";
+const OfferBridges_url = "https://github.com/Mohd-Umair-Lari/Offer-Bridge";
 const EMAIL = "umairlari0786@gmail.com";
 const PHONE_PRIMARY = "+91 63881-83436";
 const PHONE_SECONDARY = "+91 99566-75648";
@@ -220,7 +222,7 @@ function About() {
             <ul className="space-y-4 text-sm">
               <Row k="Based in" v="Kolkata, India" />
               <Row k="Degree" v="B.Tech CSE (AI & ML), 2023–27" />
-              <Row k="Focus" v="Applied ML · GCP · RAG" />
+              <Row k="Focus" v="Applied AI & ML · Cloud · RAG Implementation" />
               <Row k="Research" v="IEEE MPCON 2026 · Springer 2026" />
               <Row k="Languages" v="EN · DE (A2→B1) · FR (A1)" />
             </ul>
@@ -269,6 +271,7 @@ function Skills() {
         "MongoDB · MySQL",
         "Docker",
         "Git & GitHub",
+        "Playwright & Crawling"
       ],
     },
     { title: "Concepts", items: ["SDLC", "OOP", "DSA", "DBMS", "Unit Testing", "Version Control"] },
@@ -397,21 +400,21 @@ function Projects() {
         "CORS-aware cross-origin integration between a Vercel frontend and a HuggingFace-hosted backend.",
       ],
       stack: ["FastAPI", "Flask", "MongoDB", "RAG", "Monte Carlo", "Vercel", "HuggingFace"],
-      href: GITHUB_URL,
+      href: Finpass_url,
       cta: "GitHub repo",
     },
     {
       n: "02",
-      title: "Serverless AI API on GCP",
-      tagline: "FinPass, productionised on Google Cloud.",
+      title: "OfferBridges",
+      tagline: "Credit card Marketplace for offers on E-Commerce.",
       body: [
-        "Containerised Python backend + frontend with Docker, deployed to Cloud Run for fully managed, autoscaling serverless inference.",
-        "Integrated Google Generative AI via Vertex AI alongside pre-trained APIs, exposed through clean REST endpoints.",
-        "Leveraged BigQuery ML for data ingestion and analytics pipelines feeding the LLM layer.",
+        "A full-stack credit card marketplace for offers on e-commerce, built with React and FastAPI.",
+        "Engineered an automated offer-intelligence pipeline using crawler, Playwright/fetch-based extraction and AI-assisted discount evaluation. It processes Amazon, Flipkart, and Myntra product links, identifies eligible bank-card offers, calculates the best savings and Matches them to the desired card holders in real time",
+        "A Refactored platform architecture oriented on Next.js + Node.js to withstand the scrapping combining React 19 for the Frorntend and MongoDB, JWT/OAuth to support Database and 10000+ request robustness.",
       ],
-      stack: ["Cloud Run", "Vertex AI", "BigQuery ML", "Docker", "Generative AI"],
-      href: GITHUB_URL,
-      cta: "GCP console",
+      stack: ["React", "Node.js+Next.js", "MongoDB", "JWT/OAuth", "Playwright"],
+      href: OfferBridges_url,
+      cta: "GitHub repo",
     },
   ];
 
@@ -476,6 +479,7 @@ function Publications() {
       title: "An Edge-Native Machine Learning Framework for Proactive IoT Network Security",
       authors: "Babul P. Tewari, Umair Lari, Poulomi Mukherjee",
       tag: "Conference",
+      href: "https://ieeexplore.ieee.org/abstract/document/11508580"
     },
     {
       venue: "Springer — Securing the Internet of Things: ML and Beyond",
@@ -526,8 +530,8 @@ function Certifications() {
       title: "Google Cloud Arcade — Skill Badges",
       desc: "Hands-on labs in cloud infrastructure & data engineering",
     },
-    { title: "Cybersecurity Foundation — Coursera", desc: "Micro-degree, Apr 2024" },
-    { title: "Python WebDev & Cloud — Microsoft", desc: "Feb 2024" },
+    { title: "Google Scholar", desc: "Made the public appearance with first publication, Feb 2024" },
+    { title: "Cybersecurity Foundation — Coursera", desc: "8-course Micro-degree progrem for cybersecurity tinkering, Apr 2024" },
   ];
 
   return (
@@ -569,6 +573,9 @@ function Contact() {
             <ContactCard label="GitHub" value="Mohd-Umair-Lari" href={GITHUB_URL} />
           </Reveal>
           <Reveal delay={0.3}>
+            <ContactCard label="LinkedIn" value="Mohd-Umair-Lari" href={LinkedIn_URL} />
+          </Reveal>
+          <Reveal delay={0.4}>
             <ContactCard
               label="Phone"
               value={PHONE_PRIMARY}
