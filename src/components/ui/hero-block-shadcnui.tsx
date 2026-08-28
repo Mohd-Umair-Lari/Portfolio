@@ -1,7 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import { ArrowDown, Github, Mail } from "lucide-react";
+import { ArrowDown, Github, Linkedin, Mail } from "lucide-react";
 
 export function HeroBlock() {
   return (
@@ -92,6 +92,11 @@ export function HeroBlock() {
           >
             {[
               { icon: Github, href: "https://github.com/Mohd-Umair-Lari", label: "GitHub" },
+              {
+                icon: Linkedin,
+                href: "https://www.linkedin.com/in/mohd-umair-lari-872594288/",
+                label: "LinkedIn",
+              },
               { icon: Mail, href: "mailto:umairlari0786@gmail.com", label: "Email" },
             ].map((social) => (
               <motion.a
