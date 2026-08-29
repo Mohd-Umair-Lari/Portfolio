@@ -271,7 +271,7 @@ function Skills() {
         "MongoDB · MySQL",
         "Docker",
         "Git & GitHub",
-        "Playwright & Crawling"
+        "Playwright & Crawling",
       ],
     },
     { title: "Concepts", items: ["SDLC", "OOP", "DSA", "DBMS", "Unit Testing", "Version Control"] },
@@ -479,7 +479,7 @@ function Publications() {
       title: "An Edge-Native Machine Learning Framework for Proactive IoT Network Security",
       authors: "Babul P. Tewari, Umair Lari, Poulomi Mukherjee",
       tag: "Conference",
-      href: "https://ieeexplore.ieee.org/abstract/document/11508580"
+      href: "https://ieeexplore.ieee.org/abstract/document/11508580",
     },
     {
       venue: "Springer — Securing the Internet of Things: ML and Beyond",
@@ -530,8 +530,14 @@ function Certifications() {
       title: "Google Cloud Arcade — Skill Badges",
       desc: "Hands-on labs in cloud infrastructure & data engineering",
     },
-    { title: "Google Scholar", desc: "Made the public appearance with first publication, Feb 2024" },
-    { title: "Cybersecurity Foundation — Coursera", desc: "8-course Micro-degree progrem for cybersecurity tinkering, Apr 2024" },
+    {
+      title: "Google Scholar",
+      desc: "Made the public appearance with first publication, Feb 2024",
+    },
+    {
+      title: "Cybersecurity Foundation — Coursera",
+      desc: "8-course Micro-degree progrem for cybersecurity tinkering, Apr 2024",
+    },
   ];
 
   return (
