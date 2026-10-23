@@ -1,13 +1,20 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion, useScroll, useTransform } from "framer-motion";
 import { lazy, Suspense, useEffect, useState, type ReactNode } from "react";
+import { ArrowUpRight, Menu, X } from "lucide-react";
 import { HeroBlock } from "@/components/ui/hero-block-shadcnui";
+import { Reveal } from "@/components/Reveal";
+import { Button } from "@/components/ui/button";
+import { baseTransition } from "@/lib/motion";
+import { cn } from "@/lib/utils";
 
 const DotSphere = lazy(() => import("@/components/DotSphere"));
 const GITHUB_URL = "https://github.com/Mohd-Umair-Lari";
-const LinkedIn_URL = "https://www.linkedin.com/in/mohd-umair-lari-872594288/";
-const Finpass_url = "https://github.com/Mohd-Umair-Lari/AI-Driven-Invest-planner";
-const OfferBridges_url = "https://github.com/Mohd-Umair-Lari/Offer-Bridge";
+const LINKEDIN_URL = "https://www.linkedin.com/in/mohd-umair-lari-872594288/";
+const FINPASS_URL = "https://github.com/Mohd-Umair-Lari/AI-Driven-Invest-planner";
+const OFFERBRIDGES_URL = "https://github.com/Mohd-Umair-Lari/Offer-Bridge";
+const SCHOLAR_URL =
+  "https://scholar.google.com/citations?view_op=list_works&hl=en&hl=en&user=zTbVLvcAAAAJ";
 const EMAIL = "umairlari0786@gmail.com";
 const PHONE_PRIMARY = "+91 63881-83436";
 const PHONE_SECONDARY = "+91 99566-75648";
@@ -28,89 +35,32 @@ export const Route = createFileRoute("/")({
         content:
           "FinPass · Serverless AI on GCP · IEEE & Springer publications. Portfolio of Mohd Umair Lari.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Portfolio,
 });
 
-/* ---------------- Reveal helper ---------------- */
+const NAV_LINKS = [
+  ["About", "about"],
+  ["Skills", "skills"],
+  ["Work", "experience"],
+  ["Projects", "projects"],
+  ["Research", "publications"],
+  ["Credentials", "certs"],
+  ["Contact", "contact"],
+] as const;
 
-function Reveal({
-  children,
-  delay = 0,
-  y = 24,
-  className,
-}: {
-  children: ReactNode;
-  delay?: number;
-  y?: number;
-  className?: string;
-}) {
-  const reduce = useReducedMotion();
-  return (
-    <motion.div
-      initial={reduce ? false : { opacity: 0, y }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: 0.8, delay, ease: [0.22, 1, 0.36, 1] }}
-      className={className}
-    >
-      {children}
-    </motion.div>
-  );
-}
-
-/* ---------------- Sphere stage (fixed background) ---------------- */
-
-function SphereStage() {
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
-  const { scrollYProgress } = useScroll();
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 1.35]);
-  const opacity = useTransform(scrollYProgress, [0, 0.4, 1], [1, 0.7, 0.45]);
-
-  return (
-    <motion.div
-      style={{ scale, opacity }}
-      className="fixed inset-0 -z-10 pointer-events-none"
-      aria-hidden
-    >
-      {/* dotted grid backdrop */}
-      <div
-        className="absolute inset-0 opacity-[0.22]"
-        style={{
-          backgroundImage: "radial-gradient(rgba(40,80,50,0.55) 1px, transparent 1px)",
-          backgroundSize: "22px 22px",
-          maskImage: "radial-gradient(ellipse at center, black 35%, transparent 75%)",
-          WebkitMaskImage: "radial-gradient(ellipse at center, black 35%, transparent 75%)",
-        }}
-      />
-      {/* gold ambient glow */}
-      <div
-        className="absolute inset-0 opacity-50"
-        style={{
-          background:
-            "radial-gradient(900px 500px at 50% 50%, color-mix(in oklab, var(--gold) 12%, transparent), transparent 65%)",
-        }}
-      />
-      {mounted && (
-        <Suspense fallback={null}>
-          <div className="absolute bottom-0 right-0 w-[50vw] h-[50vw] md:w-[36vw] md:h-[36vw] lg:w-[30vw] lg:h-[30vw] pointer-events-none">
-            <DotSphere />
-          </div>
-        </Suspense>
-      )}
-    </motion.div>
-  );
-}
+const external = (href: string) =>
+  href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {};
 
 /* ---------------- Page ---------------- */
 
 function Portfolio() {
   return (
     <div className="relative min-h-screen text-foreground overflow-x-hidden">
-      <ScrollBackground />
-      <SphereStage />
+      <Backdrop />
       <Nav />
       <main className="relative">
         <HeroBlock />
@@ -127,65 +77,166 @@ function Portfolio() {
   );
 }
 
-function ScrollBackground() {
+/* ---------------- Fixed backdrop (green → white on scroll + sphere) ---------------- */
+
+function Backdrop() {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
   const { scrollYProgress } = useScroll();
-  const bg = useTransform(
-    scrollYProgress,
-    [0, 0.5, 1],
-    [
-      "linear-gradient(180deg, #c8ebc8 0%, #dff3df 100%)",
-      "linear-gradient(180deg, #eaf6ea 0%, #f6fbf6 100%)",
-      "linear-gradient(180deg, #ffffff 0%, #ffffff 100%)",
-    ],
-  );
+  const greenOpacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
+  const sphereScale = useTransform(scrollYProgress, [0, 1], [1, 1.3]);
+  const sphereOpacity = useTransform(scrollYProgress, [0, 0.4, 1], [1, 0.7, 0.45]);
+
   return (
-    <motion.div
-      aria-hidden
-      style={{ background: bg }}
-      className="fixed inset-0 -z-20 pointer-events-none"
-    />
+    <div aria-hidden className="fixed inset-0 -z-10 pointer-events-none">
+      <motion.div style={{ opacity: greenOpacity }} className="absolute inset-0 bg-backdrop" />
+      <div className="absolute inset-0 bg-dot-grid opacity-25" />
+      <div className="absolute inset-0 bg-glow opacity-50" />
+      {mounted && (
+        <motion.div
+          style={{ scale: sphereScale, opacity: sphereOpacity }}
+          className="absolute bottom-0 right-0 w-[50vw] h-[50vw] md:w-[36vw] md:h-[36vw] lg:w-[30vw] lg:h-[30vw]"
+        >
+          <Suspense fallback={null}>
+            <DotSphere />
+          </Suspense>
+        </motion.div>
+      )}
+    </div>
   );
 }
 
 /* ---------------- Nav ---------------- */
 
+function useActiveSection() {
+  const [active, setActive] = useState<string>("");
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => e.isIntersecting && setActive(e.target.id));
+      },
+      { rootMargin: "-45% 0px -50% 0px" },
+    );
+    NAV_LINKS.forEach(([, id]) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+    return () => observer.disconnect();
+  }, []);
+  return active;
+}
+
 function Nav() {
-  const links = [
-    ["About", "#about"],
-    ["Skills", "#skills"],
-    ["Work", "#experience"],
-    ["Projects", "#projects"],
-    ["Research", "#publications"],
-    ["Contact", "#contact"],
-  ] as const;
+  const active = useActiveSection();
+  const [open, setOpen] = useState(false);
+  const { scrollYProgress } = useScroll();
 
   return (
     <motion.header
-      initial={{ y: -40, opacity: 0 }}
+      initial={{ y: -24, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-      className="sticky top-0 z-40 backdrop-blur-md bg-background/60 border-b border-gold/40"
+      transition={baseTransition}
+      className="fixed inset-x-0 top-0 z-40 backdrop-blur-md bg-card border-b border-border"
     >
       <div className="container-prose flex items-center justify-between h-16">
-        <a href="#top" className="font-display text-xl tracking-wide text-gold">
-          Lari
+        <a href="#top" className="font-display text-xl font-semibold tracking-wide text-gold">
+          Lari<span className="text-foreground">.</span>
         </a>
-        <nav className="hidden md:flex items-center gap-8 text-sm text-muted-foreground">
-          {links.map(([label, href]) => (
-            <a key={href} href={href} className="story-link hover:text-gold transition-colors">
+        <nav className="hidden lg:flex items-center gap-7 text-sm">
+          {NAV_LINKS.map(([label, id]) => (
+            <a
+              key={id}
+              href={`#${id}`}
+              className={cn(
+                "story-link transition-colors",
+                active === id ? "text-gold" : "text-muted-foreground hover:text-gold",
+              )}
+            >
               {label}
             </a>
           ))}
         </nav>
-        <a
-          href={CV_HREF}
-          download
-          className="hidden sm:inline-flex items-center gap-2 px-4 py-2 text-xs font-medium uppercase tracking-widest border border-gold/60 text-gold hover:bg-gold hover:text-primary-foreground transition-colors"
-        >
-          Download CV
-        </a>
+        <div className="flex items-center gap-2">
+          <Button variant="accent" size="sm" asChild className="hidden sm:inline-flex">
+            <a href={CV_HREF} download>
+              Download CV
+            </a>
+          </Button>
+          <button
+            type="button"
+            aria-label={open ? "Close menu" : "Open menu"}
+            onClick={() => setOpen((v) => !v)}
+            className="lg:hidden inline-flex h-9 w-9 items-center justify-center rounded-md text-foreground hover:bg-secondary transition-colors"
+          >
+            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+        </div>
       </div>
+      <motion.div
+        style={{ scaleX: scrollYProgress }}
+        className="absolute bottom-0 left-0 right-0 h-0.5 origin-left bg-gold"
+      />
+      <AnimatePresence>
+        {open && (
+          <motion.nav
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={baseTransition}
+            className="lg:hidden overflow-hidden border-t border-border"
+          >
+            <div className="container-prose py-4 flex flex-col">
+              {NAV_LINKS.map(([label, id]) => (
+                <a
+                  key={id}
+                  href={`#${id}`}
+                  onClick={() => setOpen(false)}
+                  className={cn(
+                    "py-3 text-base border-b border-border/60 last:border-0 transition-colors",
+                    active === id ? "text-gold" : "text-foreground hover:text-gold",
+                  )}
+                >
+                  {label}
+                </a>
+              ))}
+              <a href={CV_HREF} download className="py-3 text-base text-gold sm:hidden">
+                Download CV
+              </a>
+            </div>
+          </motion.nav>
+        )}
+      </AnimatePresence>
     </motion.header>
+  );
+}
+
+/* ---------------- Shared ---------------- */
+
+function Section({
+  id,
+  eyebrow,
+  title,
+  children,
+}: {
+  id: string;
+  eyebrow: string;
+  title: string;
+  children: ReactNode;
+}) {
+  return (
+    <section id={id} className="relative border-t border-border/60">
+      <div className="container-prose py-24 md:py-32">
+        <Reveal>
+          <header className="mb-14 max-w-3xl">
+            <p className="eyebrow mb-5">{eyebrow}</p>
+            <h2 className="font-display text-4xl md:text-6xl font-semibold tracking-tight leading-[1.05]">
+              {title}
+            </h2>
+          </header>
+        </Reveal>
+        {children}
+      </div>
+    </section>
   );
 }
 
@@ -216,8 +267,8 @@ function About() {
           </p>
         </Reveal>
 
-        <Reveal delay={0.15} className="md:col-span-2">
-          <aside className="border border-border p-8 bg-card/70 backdrop-blur-sm">
+        <Reveal index={1} className="md:col-span-2">
+          <aside className="surface p-8">
             <p className="eyebrow mb-6">At a glance</p>
             <ul className="space-y-4 text-sm">
               <Row k="Based in" v="Kolkata, India" />
@@ -235,7 +286,7 @@ function About() {
 
 function Row({ k, v }: { k: string; v: string }) {
   return (
-    <li className="flex justify-between gap-4 border-b border-border/60 pb-3">
+    <li className="flex justify-between gap-4 border-b border-border/60 pb-3 last:border-0 last:pb-0">
       <span className="text-muted-foreground">{k}</span>
       <span className="text-foreground text-right">{v}</span>
     </li>
@@ -282,24 +333,17 @@ function Skills() {
     <Section id="skills" eyebrow="02 — Toolkit" title="Stack & specialisms.">
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {groups.map((g, i) => (
-          <Reveal key={g.title} delay={i * 0.06}>
-            <motion.div
-              whileHover={{ y: -6, borderColor: "var(--gold)" }}
-              transition={{ type: "spring", stiffness: 260, damping: 22 }}
-              className="group border border-border p-6 bg-card/70 backdrop-blur-sm h-full"
-            >
-              <h3 className="font-display text-2xl text-gold mb-4">{g.title}</h3>
+          <Reveal key={g.title} index={i} className="h-full">
+            <div className="group surface surface-interactive p-6 h-full">
+              <h3 className="font-display text-xl font-semibold text-gold mb-4">{g.title}</h3>
               <ul className="flex flex-wrap gap-2">
                 {g.items.map((it) => (
-                  <li
-                    key={it}
-                    className="text-xs px-3 py-1.5 border border-border/80 text-muted-foreground group-hover:text-foreground transition-colors"
-                  >
+                  <li key={it} className="chip group-hover:text-foreground">
                     {it}
                   </li>
                 ))}
               </ul>
-            </motion.div>
+            </div>
           </Reveal>
         ))}
       </div>
@@ -312,7 +356,7 @@ function Skills() {
 function Experience() {
   return (
     <Section id="experience" eyebrow="03 — Experience" title="Where I've worked.">
-      <ol className="space-y-12">
+      <ol>
         <ExperienceItem
           when="Apr 2024 — Jun 2024"
           role="Data Analyst Intern"
@@ -346,43 +390,37 @@ function ExperienceItem({
   note?: string;
 }) {
   return (
-    <Reveal>
-      <li className="grid md:grid-cols-[200px_1fr] gap-8 border-t border-border pt-12">
-        <div>
-          <p className="font-mono text-xs uppercase tracking-widest text-gold">{when}</p>
-          {note && <p className="mt-3 text-xs text-muted-foreground italic">{note}</p>}
-        </div>
-        <div>
-          <h3 className="font-display text-3xl md:text-4xl">{role}</h3>
+    <li className="grid md:grid-cols-[200px_1fr] gap-8 border-t border-border pt-12">
+      <Reveal>
+        <p className="font-mono text-xs uppercase tracking-widest text-gold">{when}</p>
+        {note && <p className="mt-3 text-xs text-muted-foreground italic">{note}</p>}
+      </Reveal>
+      <div>
+        <Reveal index={1}>
+          <h3 className="font-display text-3xl md:text-4xl font-semibold">{role}</h3>
           <p className="mt-1 text-muted-foreground">{org}</p>
-          <ul className="mt-6 space-y-3 text-muted-foreground">
-            {bullets.map((b, i) => (
-              <motion.li
-                key={b}
-                initial={{ opacity: 0, x: -12 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1, duration: 0.6 }}
-                className="flex gap-3"
-              >
-                <span className="text-gold mt-2 shrink-0">—</span>
+        </Reveal>
+        <div className="mt-6 space-y-3 text-muted-foreground leading-relaxed">
+          {bullets.map((b, i) => (
+            <Reveal key={b} index={i + 2}>
+              <p className="flex gap-3">
+                <span className="text-gold shrink-0">—</span>
                 <span>{b}</span>
-              </motion.li>
-            ))}
-          </ul>
-          <div className="mt-5 flex flex-wrap gap-2">
+              </p>
+            </Reveal>
+          ))}
+        </div>
+        <Reveal index={bullets.length + 2}>
+          <div className="mt-6 flex flex-wrap gap-2">
             {tags.map((t) => (
-              <span
-                key={t}
-                className="text-[10px] uppercase tracking-widest px-2.5 py-1 border border-gold/40 text-gold"
-              >
+              <span key={t} className="chip-accent">
                 {t}
               </span>
             ))}
           </div>
-        </div>
-      </li>
-    </Reveal>
+        </Reveal>
+      </div>
+    </li>
   );
 }
 
@@ -400,68 +438,58 @@ function Projects() {
         "CORS-aware cross-origin integration between a Vercel frontend and a HuggingFace-hosted backend.",
       ],
       stack: ["FastAPI", "Flask", "MongoDB", "RAG", "Monte Carlo", "Vercel", "HuggingFace"],
-      href: Finpass_url,
-      cta: "GitHub repo",
+      href: FINPASS_URL,
     },
     {
       n: "02",
       title: "OfferBridges",
-      tagline: "Credit card Marketplace for offers on E-Commerce.",
+      tagline: "Credit card marketplace for offers on e-commerce.",
       body: [
         "A full-stack credit card marketplace for offers on e-commerce, built with React and FastAPI.",
-        "Engineered an automated offer-intelligence pipeline using crawler, Playwright/fetch-based extraction and AI-assisted discount evaluation. It processes Amazon, Flipkart, and Myntra product links, identifies eligible bank-card offers, calculates the best savings and Matches them to the desired card holders in real time",
-        "A Refactored platform architecture oriented on Next.js + Node.js to withstand the scrapping combining React 19 for the Frorntend and MongoDB, JWT/OAuth to support Database and 10000+ request robustness.",
+        "Engineered an automated offer-intelligence pipeline using crawler, Playwright/fetch-based extraction and AI-assisted discount evaluation. It processes Amazon, Flipkart and Myntra product links, identifies eligible bank-card offers, calculates the best savings and matches them to the desired card holders in real time.",
+        "Refactored the platform architecture onto Next.js + Node.js to withstand the scraping load, combining React 19 for the frontend with MongoDB and JWT/OAuth to support 10,000+ requests robustly.",
       ],
-      stack: ["React", "Node.js+Next.js", "MongoDB", "JWT/OAuth", "Playwright"],
-      href: OfferBridges_url,
-      cta: "GitHub repo",
+      stack: ["React", "Node.js + Next.js", "MongoDB", "JWT/OAuth", "Playwright"],
+      href: OFFERBRIDGES_URL,
     },
   ];
 
   return (
     <Section id="projects" eyebrow="04 — Selected work" title="Projects.">
-      <div className="space-y-16">
+      <div className="space-y-8">
         {projects.map((p, idx) => (
-          <Reveal key={p.title} delay={idx * 0.08}>
-            <motion.article
-              whileHover={{ y: -4 }}
-              transition={{ type: "spring", stiffness: 200, damping: 20 }}
-              className="group grid md:grid-cols-12 gap-8 border-t border-gold/30 pt-12"
-            >
-              <div className="md:col-span-3">
+          <Reveal key={p.title} index={idx}>
+            <article className="group surface surface-interactive grid md:grid-cols-12 gap-8 p-8 md:p-10">
+              <div className="md:col-span-4">
                 <p className="font-mono text-xs text-gold">{p.n} / PROJECT</p>
-                <h3 className="font-display text-4xl md:text-5xl mt-3 leading-none">{p.title}</h3>
+                <h3 className="font-display text-4xl md:text-5xl font-semibold mt-3 leading-none">
+                  {p.title}
+                </h3>
+                <a
+                  href={p.href}
+                  {...external(p.href)}
+                  className="mt-6 inline-flex items-center gap-1.5 text-sm text-gold story-link"
+                >
+                  GitHub repo
+                  <ArrowUpRight className="h-4 w-4 transition-transform duration-300 ease-brand group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                </a>
               </div>
-              <div className="md:col-span-9">
-                <p className="text-xl md:text-2xl font-display italic text-gold-soft">
-                  {p.tagline}
-                </p>
-                <div className="mt-6 space-y-4 text-muted-foreground leading-relaxed">
+              <div className="md:col-span-8">
+                <p className="text-xl md:text-2xl font-display text-gold-soft">{p.tagline}</p>
+                <div className="mt-5 space-y-4 text-muted-foreground leading-relaxed">
                   {p.body.map((para) => (
                     <p key={para}>{para}</p>
                   ))}
                 </div>
                 <div className="mt-6 flex flex-wrap gap-2">
                   {p.stack.map((s) => (
-                    <span
-                      key={s}
-                      className="text-[10px] uppercase tracking-widest px-2.5 py-1 border border-border text-muted-foreground"
-                    >
+                    <span key={s} className="chip">
                       {s}
                     </span>
                   ))}
                 </div>
-                <a
-                  href={p.href}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="mt-8 inline-flex items-center gap-2 text-sm text-gold hover:text-gold-soft transition-colors story-link"
-                >
-                  {p.cta}
-                  <span className="transition-transform group-hover:translate-x-1">↗</span>
-                </a>
               </div>
-            </motion.article>
+            </article>
           </Reveal>
         ))}
       </div>
@@ -487,15 +515,16 @@ function Publications() {
       title: "Malware Detection in IoT: A Machine Learning based Solution",
       authors: "Umair Lari, Poulomi Mukherjee, Babul P. Tewari",
       tag: "Book chapter",
+      href: SCHOLAR_URL,
     },
   ];
 
   return (
     <Section id="publications" eyebrow="05 — Research" title="Published work.">
-      <ul className="space-y-8">
+      <div className="space-y-6">
         {pubs.map((p, i) => (
-          <Reveal key={p.title} delay={i * 0.1}>
-            <li className="grid md:grid-cols-[180px_1fr_auto] gap-6 border-t border-border pt-8">
+          <Reveal key={p.title} index={i}>
+            <article className="surface surface-interactive grid md:grid-cols-[180px_1fr_auto] gap-6 p-8">
               <div>
                 <p className="font-mono text-xs text-gold uppercase tracking-widest">
                   {p.venue.split(" — ")[0]}
@@ -503,17 +532,22 @@ function Publications() {
                 <p className="text-xs text-muted-foreground mt-1">{p.when}</p>
               </div>
               <div>
-                <h3 className="font-display text-2xl leading-snug">{p.title}</h3>
+                <h3 className="font-display text-2xl font-semibold leading-snug">{p.title}</h3>
                 <p className="mt-2 text-sm text-muted-foreground italic">{p.authors}</p>
                 <p className="mt-1 text-xs text-muted-foreground">{p.venue}</p>
               </div>
-              <span className="self-start text-[10px] uppercase tracking-widest px-2.5 py-1 border border-gold/50 text-gold">
+              <a
+                href={p.href}
+                {...external(p.href)}
+                className="chip-accent self-start hover:bg-gold hover:text-primary-foreground"
+              >
                 {p.tag}
-              </span>
-            </li>
+                <ArrowUpRight className="h-3 w-3" />
+              </a>
+            </article>
           </Reveal>
         ))}
-      </ul>
+      </div>
     </Section>
   );
 }
@@ -525,30 +559,46 @@ function Certifications() {
     {
       title: "LeetCode — Top 15% Biweekly",
       desc: "300+ submissions · 50-day & 100-day streak badges",
+      href: "https://leetcode.com/u/Umair-Lari/",
     },
     {
       title: "Google Cloud Arcade — Skill Badges",
       desc: "Hands-on labs in cloud infrastructure & data engineering",
+      href: "https://www.skills.google/public_profiles/8d66a145-3000-404c-96a5-4863dd281884",
     },
     {
       title: "Google Scholar",
       desc: "Made the public appearance with first publication, Feb 2024",
+      href: SCHOLAR_URL,
     },
     {
       title: "Cybersecurity Foundation — Coursera",
-      desc: "8-course Micro-degree progrem for cybersecurity tinkering, Apr 2024",
+      desc: "8-course micro-degree program for cybersecurity tinkering, Apr 2024",
+      href: "https://www.coursera.org/account/accomplishments/professional-cert/HQKJ5229NCUV?utm_source=link&utm_medium=certificate&utm_content=cert_image&utm_campaign=sharing_cta&utm_product=prof",
     },
   ];
 
   return (
     <Section id="certs" eyebrow="06 — Credentials" title="Certifications & achievements.">
-      <div className="grid sm:grid-cols-2 gap-px bg-border">
+      <div className="grid sm:grid-cols-2 gap-6">
         {items.map((it, i) => (
-          <Reveal key={it.title} delay={i * 0.08}>
-            <div className="bg-background/80 backdrop-blur-sm p-8 h-full hover:bg-card transition-colors">
-              <p className="font-display text-2xl text-foreground">{it.title}</p>
-              <p className="mt-3 text-sm text-muted-foreground">{it.desc}</p>
-            </div>
+          <Reveal key={it.title} index={i} className="h-full">
+            <a
+              href={it.href}
+              {...external(it.href)}
+              className="group surface surface-interactive flex h-full flex-col justify-between gap-6 p-8"
+            >
+              <div>
+                <p className="font-display text-2xl font-semibold text-foreground group-hover:text-gold transition-colors">
+                  {it.title}
+                </p>
+                <p className="mt-3 text-sm text-muted-foreground">{it.desc}</p>
+              </div>
+              <span className="inline-flex items-center gap-1.5 text-xs font-mono uppercase tracking-widest text-gold">
+                View profile
+                <ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-300 ease-brand group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              </span>
+            </a>
           </Reveal>
         ))}
       </div>
@@ -559,53 +609,60 @@ function Certifications() {
 /* ---------------- Contact ---------------- */
 
 function Contact() {
+  const cards = [
+    { label: "Email", value: EMAIL, href: `mailto:${EMAIL}` },
+    { label: "GitHub", value: "Mohd-Umair-Lari", href: GITHUB_URL },
+    { label: "LinkedIn", value: "Connect with me", href: LINKEDIN_URL },
+    {
+      label: "Phone",
+      value: PHONE_PRIMARY,
+      secondary: PHONE_SECONDARY,
+      href: `tel:${PHONE_PRIMARY.replace(/\s|-/g, "")}`,
+    },
+  ];
+
   return (
-    <section id="contact" className="relative">
-      <div className="container-prose py-32 md:py-44">
+    <section id="contact" className="relative border-t border-border/60">
+      <div className="container-prose py-28 md:py-40">
         <Reveal>
           <p className="eyebrow mb-6">07 — Contact</p>
-          <h2 className="font-display text-5xl md:text-7xl leading-[1] tracking-tight">
+          <h2 className="font-display text-5xl md:text-7xl font-semibold leading-[1.02] tracking-tight">
             Let's build something
             <br />
-            <span className="italic text-gradient-gold">worth publishing.</span>
+            <span className="text-gradient-gold">worth publishing.</span>
           </h2>
         </Reveal>
 
-        <div className="mt-16 grid md:grid-cols-3 gap-10">
-          <Reveal delay={0.1}>
-            <ContactCard label="Email" value={EMAIL} href={`mailto:${EMAIL}`} />
-          </Reveal>
-          <Reveal delay={0.2}>
-            <ContactCard label="GitHub" value="Clone it" href={GITHUB_URL} />
-          </Reveal>
-          <Reveal delay={0.3}>
-            <ContactCard label="LinkedIn" value="Connect with me" href={LinkedIn_URL} />
-          </Reveal>
-          <Reveal delay={0.4}>
-            <ContactCard
-              label="Phone"
-              value={PHONE_PRIMARY}
-              secondary={PHONE_SECONDARY}
-              href={`tel:${PHONE_PRIMARY.replace(/\s|-/g, "")}`}
-            />
-          </Reveal>
+        <div className="mt-16 grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {cards.map((c, i) => (
+            <Reveal key={c.label} index={i} className="h-full">
+              <a
+                href={c.href}
+                {...external(c.href)}
+                className="group surface surface-interactive block h-full p-6"
+              >
+                <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
+                  {c.label}
+                </p>
+                <p className="mt-3 font-display text-lg font-semibold group-hover:text-gold transition-colors break-all">
+                  {c.value}
+                </p>
+                {c.secondary && <p className="mt-1 text-sm text-muted-foreground">{c.secondary}</p>}
+              </a>
+            </Reveal>
+          ))}
         </div>
 
-        <Reveal delay={0.35}>
-          <div className="mt-16 flex flex-wrap gap-4">
-            <a
-              href={`mailto:${EMAIL}`}
-              className="inline-flex items-center gap-3 bg-gold text-primary-foreground px-6 py-3 text-sm font-medium tracking-wide hover:opacity-90 transition hover-scale"
-            >
-              Email me →
-            </a>
-            <a
-              href={CV_HREF}
-              download
-              className="inline-flex items-center gap-3 px-6 py-3 text-sm font-medium tracking-wide border border-gold/60 text-gold hover:bg-gold hover:text-primary-foreground transition-colors"
-            >
-              Download CV (PDF)
-            </a>
+        <Reveal index={2}>
+          <div className="mt-14 flex flex-wrap gap-4">
+            <Button variant="hero" size="lg" asChild>
+              <a href={`mailto:${EMAIL}`}>Email me →</a>
+            </Button>
+            <Button variant="accent" size="lg" asChild>
+              <a href={CV_HREF} download>
+                Download CV (PDF)
+              </a>
+            </Button>
           </div>
         </Reveal>
       </div>
@@ -613,76 +670,25 @@ function Contact() {
   );
 }
 
-function ContactCard({
-  label,
-  value,
-  secondary,
-  href,
-}: {
-  label: string;
-  value: string;
-  secondary?: string;
-  href: string;
-}) {
-  return (
-    <motion.a
-      whileHover={{ y: -4 }}
-      transition={{ type: "spring", stiffness: 260, damping: 20 }}
-      href={href}
-      target={href.startsWith("http") ? "_blank" : undefined}
-      rel="noreferrer"
-      className="group block border-t border-gold/40 pt-6 hover:border-gold transition-colors"
-    >
-      <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
-        {label}
-      </p>
-      <p className="mt-3 font-display text-2xl group-hover:text-gold transition-colors break-all">
-        {value}
-      </p>
-      {secondary && <p className="mt-1 text-sm text-muted-foreground">{secondary}</p>}
-    </motion.a>
-  );
-}
-
 /* ---------------- Footer ---------------- */
 
 function Footer() {
   return (
-    <footer className="relative border-t border-border">
+    <footer className="relative border-t border-border bg-card backdrop-blur-sm">
       <div className="container-prose py-10 flex flex-col md:flex-row gap-4 items-center justify-between text-xs text-muted-foreground">
         <p>© {new Date().getFullYear()} Mohd Umair Lari. All rights reserved.</p>
-        <p className="font-mono uppercase tracking-widest">Kolkata · India</p>
+        <div className="flex items-center gap-6 font-mono uppercase tracking-widest">
+          <a href={GITHUB_URL} {...external(GITHUB_URL)} className="story-link hover:text-gold">
+            GitHub
+          </a>
+          <a href={LINKEDIN_URL} {...external(LINKEDIN_URL)} className="story-link hover:text-gold">
+            LinkedIn
+          </a>
+          <a href="#top" className="story-link hover:text-gold">
+            Back to top ↑
+          </a>
+        </div>
       </div>
     </footer>
-  );
-}
-
-/* ---------------- Shared ---------------- */
-
-function Section({
-  id,
-  eyebrow,
-  title,
-  children,
-}: {
-  id: string;
-  eyebrow: string;
-  title: string;
-  children: ReactNode;
-}) {
-  return (
-    <section id={id} className="relative border-t border-border/60">
-      <div className="container-prose py-24 md:py-32">
-        <Reveal>
-          <header className="mb-14 max-w-3xl">
-            <p className="eyebrow mb-5">{eyebrow}</p>
-            <h2 className="font-display text-4xl md:text-6xl tracking-tight leading-[1.05]">
-              {title}
-            </h2>
-          </header>
-        </Reveal>
-        {children}
-      </div>
-    </section>
   );
 }
