@@ -38,41 +38,50 @@
   --font-display: "Google Sans", "Open Sans", ui-sans-serif, system-ui, sans-serif;
   --font-sans: "Google Sans", "Open Sans", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "Google Sans Code", "JetBrains Mono", ui-monospace, monospace;
+
+  --ease-brand: cubic-bezier(0.22, 1, 0.36, 1);
+  --shadow-card: var(--shadow-soft);
+  --shadow-glow: var(--shadow-gold);
 }
 
 :root {
   --radius: 0.5rem;
 
-  /* Background is painted by the scroll layer; tokens stay high-contrast on both green and white. */
-  --bg-top: #dff3df; /* light green */
-  --bg-bottom: #ffffff; /* white */
+  /* Scroll backdrop: green at the top fading into white */
+  --bg-top: oklch(0.91 0.06 145);
+  --bg-mid: oklch(0.955 0.03 145);
+  --bg-bottom: oklch(1 0 0);
+  --grid-dot: oklch(0.35 0.07 150 / 55%);
+  --grid-line: oklch(0.5 0 0 / 7%);
 
   --background: oklch(0.96 0.04 145);
-  --foreground: oklch(0.16 0.02 160); /* near-black ink */
+  --foreground: oklch(0.16 0.02 160);
   --ink: oklch(0.99 0.005 145);
-  --card: oklch(1 0 0 / 78%); /* translucent white card */
+  --card: oklch(1 0 0 / 72%);
   --card-foreground: oklch(0.16 0.02 160);
   --popover: oklch(1 0 0 / 95%);
   --popover-foreground: oklch(0.16 0.02 160);
-  --primary: oklch(0.42 0.13 152); /* deep sage */
-  --primary-foreground: oklch(0.99 0.005 145); /* white text on sage buttons */
+  --primary: oklch(0.42 0.13 152);
+  --primary-foreground: oklch(0.99 0.005 145);
   --secondary: oklch(0.92 0.04 145);
   --secondary-foreground: oklch(0.16 0.02 160);
   --muted: oklch(0.94 0.02 145);
-  --muted-foreground: oklch(0.3 0.03 160); /* darker for legibility */
+  --muted-foreground: oklch(0.34 0.03 160);
   --accent: oklch(0.62 0.14 150);
   --accent-foreground: oklch(0.99 0.005 145);
   --destructive: oklch(0.6 0.22 25);
   --destructive-foreground: oklch(0.98 0 0);
-  --border: oklch(0.3 0.05 155 / 28%);
+  --border: oklch(0.3 0.05 155 / 20%);
   --input: oklch(0.3 0.05 155 / 22%);
   --ring: oklch(0.42 0.13 152);
 
-  --gold: oklch(0.38 0.12 152); /* alias → deep sage (used for accents) */
-  --gold-soft: oklch(0.58 0.14 150);
+  --gold: oklch(0.38 0.12 152); /* deep sage accent */
+  --gold-soft: oklch(0.55 0.14 150);
 
   --gradient-gold: linear-gradient(135deg, var(--gold) 0%, var(--gold-soft) 100%);
-  --shadow-gold: 0 20px 60px -20px color-mix(in oklab, var(--gold) 35%, transparent);
+  --gradient-backdrop: linear-gradient(180deg, var(--bg-top) 0%, var(--bg-mid) 100%);
+  --shadow-soft: 0 18px 40px -26px color-mix(in oklab, var(--gold) 55%, transparent);
+  --shadow-gold: 0 20px 50px -18px color-mix(in oklab, var(--gold) 45%, transparent);
 }
 
 @layer base {
@@ -82,10 +91,11 @@
 
   html {
     scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
   }
 
   body {
-    background-color: var(--color-background);
+    background-color: var(--bg-bottom);
     color: var(--color-foreground);
     font-family: var(--font-sans);
     font-feature-settings: "ss01", "cv11";
@@ -94,7 +104,12 @@
 
   ::selection {
     background: var(--gold);
-    color: var(--background);
+    color: var(--ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 3px;
   }
 }
 
@@ -113,8 +128,30 @@
   color: transparent;
 }
 
-@utility hairline {
-  border-top: 1px solid color-mix(in oklab, var(--gold) 40%, transparent);
+@utility bg-backdrop {
+  background: var(--gradient-backdrop);
+}
+
+@utility bg-dot-grid {
+  background-image: radial-gradient(var(--grid-dot) 1px, transparent 1px);
+  background-size: 22px 22px;
+  mask-image: radial-gradient(ellipse at center, black 35%, transparent 75%);
+}
+
+@utility bg-line-grid {
+  background-image:
+    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+  background-size: 24px 24px;
+  mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+}
+
+@utility bg-glow {
+  background: radial-gradient(
+    900px 500px at 50% 50%,
+    color-mix(in oklab, var(--gold) 12%, transparent),
+    transparent 65%
+  );
 }
 
 @utility container-prose {
@@ -129,4 +166,76 @@
   letter-spacing: 0.25em;
   text-transform: uppercase;
   color: var(--gold);
+}
+
+/* Shared card surface + one hover behaviour for every interactive card */
+@utility surface {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--card);
+  backdrop-filter: blur(8px);
+}
+
+@utility surface-interactive {
+  transition:
+    transform 0.5s var(--ease-brand),
+    border-color 0.3s var(--ease-brand),
+    box-shadow 0.5s var(--ease-brand),
+    background-color 0.3s var(--ease-brand);
+  &:hover {
+    transform: translateY(-4px);
+    border-color: color-mix(in oklab, var(--gold) 55%, transparent);
+    box-shadow: var(--shadow-soft);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    &:hover {
+      transform: none;
+    }
+  }
+}
+
+@utility chip {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.72rem;
+  line-height: 1;
+  padding: 0.45rem 0.7rem;
+  border: 1px solid var(--color-border);
+  border-radius: calc(var(--radius) - 2px);
+  color: var(--color-muted-foreground);
+  background: color-mix(in oklab, var(--bg-bottom) 55%, transparent);
+  transition:
+    color 0.3s var(--ease-brand),
+    border-color 0.3s var(--ease-brand);
+}
+
+@utility chip-accent {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 0.4rem 0.65rem;
+  border: 1px solid color-mix(in oklab, var(--gold) 40%, transparent);
+  border-radius: calc(var(--radius) - 2px);
+  color: var(--gold);
+  transition:
+    background-color 0.3s var(--ease-brand),
+    border-color 0.3s var(--ease-brand);
+}
+
+/* Animated underline for text links */
+@utility story-link {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition:
+    background-size 0.4s var(--ease-brand),
+    color 0.3s var(--ease-brand);
+  &:hover {
+    background-size: 100% 1px;
+  }
 }
