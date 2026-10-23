@@ -19,7 +19,7 @@ export function HeroBlock() {
   return (
     <section
       id="top"
-      className="relative flex items-center justify-center overflow-hidden min-h-[100svh] w-full"
+      className="hero-screen relative flex w-full items-center justify-center overflow-hidden"
     >
       <div className="absolute inset-0 bg-line-grid" aria-hidden />
 
@@ -27,7 +27,7 @@ export function HeroBlock() {
         variants={staggerContainer(0.15)}
         initial={reduce ? false : "hidden"}
         animate="show"
-        className="relative z-10 mx-auto max-w-4xl text-center px-6 pt-16"
+        className="relative z-10 mx-auto w-full max-w-4xl px-6 text-center"
       >
         <motion.div variants={fadeUp} className="mb-8 inline-block">
           <Avatar className="mx-auto h-28 w-28 md:h-32 md:w-32 border-4 border-gold/30 shadow-glow ring-4 ring-gold/15">
@@ -65,7 +65,7 @@ export function HeroBlock() {
           to edge-native IoT security, published with IEEE and Springer.
         </motion.p>
 
-        <motion.div variants={fadeUp} className="mb-12 flex flex-wrap justify-center gap-4">
+        <motion.div variants={fadeUp} className="mb-10 flex flex-wrap justify-center gap-4">
           <Button size="lg" variant="hero" asChild>
             <a href="mailto:umairlari0786@gmail.com">
               <Mail />
@@ -105,7 +105,7 @@ export function HeroBlock() {
           opacity: { delay: 1, duration: 0.7 },
           y: { delay: 1.4, duration: 2, repeat: Infinity, ease: "easeInOut" },
         }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 text-muted-foreground hover:text-gold transition-colors"
+        className="absolute bottom-6 left-1/2 -translate-x-1/2 text-muted-foreground hover:text-gold transition-colors"
       >
         <ArrowDown className="h-5 w-5" />
       </motion.a>

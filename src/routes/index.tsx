@@ -84,18 +84,18 @@ function Backdrop() {
   useEffect(() => setMounted(true), []);
   const { scrollYProgress } = useScroll();
   const greenOpacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
-  const sphereScale = useTransform(scrollYProgress, [0, 1], [1, 1.3]);
-  const sphereOpacity = useTransform(scrollYProgress, [0, 0.4, 1], [1, 0.7, 0.45]);
+  const sphereScale = useTransform(scrollYProgress, [0, 1], [1, 1.25]);
+  const sphereOpacity = useTransform(scrollYProgress, [0, 0.4, 1], [1, 0.8, 0.55]);
 
   return (
-    <div aria-hidden className="fixed inset-0 -z-10 pointer-events-none">
+    <div aria-hidden className="fixed inset-0 -z-10 pointer-events-none overflow-hidden">
       <motion.div style={{ opacity: greenOpacity }} className="absolute inset-0 bg-backdrop" />
       <div className="absolute inset-0 bg-dot-grid opacity-25" />
       <div className="absolute inset-0 bg-glow opacity-50" />
       {mounted && (
         <motion.div
           style={{ scale: sphereScale, opacity: sphereOpacity }}
-          className="absolute bottom-0 right-0 w-[50vw] h-[50vw] md:w-[36vw] md:h-[36vw] lg:w-[30vw] lg:h-[30vw]"
+          className="sphere-stage absolute"
         >
           <Suspense fallback={null}>
             <DotSphere />

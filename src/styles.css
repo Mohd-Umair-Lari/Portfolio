@@ -160,6 +160,39 @@
   padding-inline: 1.5rem;
 }
 
+/* Full-height hero that behaves the same in every browser:
+   vh fallback first, then small-viewport units where supported. Top padding
+   always clears the fixed 4rem nav, so content never slides underneath it. */
+@utility hero-screen {
+  min-height: 100vh;
+  @supports (min-height: 100svh) {
+    min-height: 100svh;
+  }
+  padding-top: calc(4rem + clamp(2.5rem, 6vh, 4.5rem));
+  padding-bottom: clamp(5rem, 10vh, 7rem);
+}
+
+/* Fixed stage for the 3D sphere: large on the right, never clipped by odd
+   viewport units, and pushed lower/smaller on narrow screens behind the text. */
+@utility sphere-stage {
+  --sphere-size: min(95vw, 560px);
+  width: var(--sphere-size);
+  height: var(--sphere-size);
+  right: calc(var(--sphere-size) * -0.28);
+  bottom: calc(var(--sphere-size) * -0.18);
+  @media (min-width: 768px) {
+    --sphere-size: min(62vw, 82vh, 760px);
+    right: calc(var(--sphere-size) * -0.32);
+    bottom: auto;
+    top: 50%;
+    margin-top: calc(var(--sphere-size) * -0.5 + 2rem);
+  }
+  @media (min-width: 1280px) {
+    --sphere-size: min(52vw, 86vh, 860px);
+    right: calc(var(--sphere-size) * -0.24);
+  }
+}
+
 @utility eyebrow {
   font-family: var(--font-mono);
   font-size: 0.7rem;
