@@ -43,7 +43,7 @@ export function HeroBlock() {
         </motion.div>
 
         <motion.p variants={fadeUp} className="eyebrow mb-4">
-          Kolkata, India · B.Tech CSE (AI & ML)
+          B.Tech CSE (AI & ML)
         </motion.p>
 
         <motion.h1
